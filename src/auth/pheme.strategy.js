@@ -24,7 +24,6 @@ class PhemeStrategy extends LocalStrategy {
         body = res.data;
       } catch(err) {
         if (err.response && err.response.status >= 400 && err.response.status < 500) {
-          console.error(err); // eslint-disable-line
           throw new NotAuthenticated(err.response.data.message);
         }
         console.error(err); // eslint-disable-line
