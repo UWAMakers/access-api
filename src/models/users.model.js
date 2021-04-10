@@ -13,7 +13,9 @@ module.exports = function (app) {
     lastName: { type: String },
     displayName: { type: String },
     roles: { type: [String], enum: ['admin', 'super_admin'] },
-  
+    preferences: {
+      dark: { type: Boolean },
+    },
   }, {
     timestamps: true
   });
