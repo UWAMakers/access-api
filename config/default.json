@@ -10,10 +10,7 @@
     "entity": "user",
     "service": "users",
     "secret": "FIbLG5b3tiyDYZEkedyAFsvm/10=",
-    "authStrategies": [
-      "jwt",
-      "local"
-    ],
+    "authStrategies": ["jwt", "local"],
     "jwtOptions": {
       "header": {
         "typ": "access"
@@ -28,5 +25,6 @@
       "passwordField": "password"
     }
   },
-  "mongodb": "MONGO_URI"
+  "mongodb": "MONGO_URI",
+  "authEndpoint": "AUTH_ENDPOINT"
 }
