@@ -29,27 +29,27 @@ class PhemeStrategy extends LocalStrategy {
         console.error(err); // eslint-disable-line
         throw new NotAuthenticated('Unknown login issue occured, please contact an administrator.');
       }
-      if (!body.success) throw new NotAuthenticated(body.message);
-      const users = await this.app.service('users').find({ query: { username: body.user.username }, paginate: false });
-      let user = null;
-      const data = {
-        username: body.user.username,
-        email: body.user.email,
-        firstName: body.user.firstname,
-        lastName: body.user.lastname,
-        displayName: body.user.firstname,
-      };
-      if (users.length === 0) {
-        user = await this.app.service('users').create(data);
-      } else {
-        data.displayName = users[0].displayName || data.displayName;
-        user = await this.app.service('users').patch(users[0]._id, data);
-      }
-      return {
-        authentication: { strategy: this.name },
-        user,
-      };
     }
+    if (!body.success) throw new NotAuthenticated(body.message);
+    const users = await this.app.service('users').find({ query: { username: body.user.username }, paginate: false });
+    let user = null;
+    const userObj = {
+      username: body.user.username,
+      email: body.user.email,
+      firstName: body.user.firstname,
+      lastName: body.user.lastname,
+      displayName: body.user.firstname,
+    };
+    if (users.length === 0) {
+      user = await this.app.service('users').create(userObj);
+    } else {
+      userObj.displayName = users[0].displayName || userObj.displayName;
+      user = await this.app.service('users').patch(users[0]._id, userObj);
+    }
+    return {
+      authentication: { strategy: this.name },
+      user,
+    };
   }
 }
 

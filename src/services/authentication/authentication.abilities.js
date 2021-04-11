@@ -13,7 +13,7 @@ const defineRulesFor = (user) => {
   const { can, cannot, rules } = new AbilityBuilder();
 
   if (user.roles.includes('super_admin')) {
-    // SuperAdmin can do evil
+    // super_admin can do evil
     can('manage', 'all');
     return rules;
   }
@@ -22,15 +22,19 @@ const defineRulesFor = (user) => {
     can('manage', 'trainings');
     can('manage', 'trainingItems');
     can('read', 'completions');
+    can('read', 'users');
+    can('update', 'users', ['displayName', 'preferences']);
+    return rules;
   }
+
+  const userId = (field = '_id') => ({ [field]: { $in: [`${user._id}`] } });
 
   can('read', 'trainings');
   can('read', 'trainingItems');
-  can('read', 'completions', { userId: user._id });
-  can('read', 'users', { _id: user._id });
-  can('update', 'users', { _id: user._id });
-  cannot('update', 'users', ['roleId'], { id: user.id });
-  cannot('delete', 'users', { _id: user._id });
+  can('read', 'completions', userId('userId'));
+  can('read', 'users', userId());
+  can('update', 'users', ['displayName', 'preferences'], userId());
+  cannot('delete', 'users', userId());
 
   return rules;
 };
