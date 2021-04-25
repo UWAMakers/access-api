@@ -21,7 +21,7 @@ module.exports = {
     ],
     remove: [
       authorize(), // make sure this hook runs always last
-    ]
+    ],
   },
 
   after: {

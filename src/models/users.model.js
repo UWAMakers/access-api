@@ -12,9 +12,9 @@ module.exports = function (app) {
     firstName: { type: String },
     lastName: { type: String },
     displayName: { type: String },
-    joinedAt: { type: Date },
     roles: { type: [String], enum: ['admin', 'super_admin'] },
     preferences: {
+      joinedAt: { type: Date },
       dark: { type: Boolean },
     },
   }, {
