@@ -1,6 +1,8 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { authorize } = require('feathers-casl').hooks;
 
+const updateTrainingParents = require('./hooks/update-training-parents');
+
 module.exports = {
   before: {
     all: [authenticate('jwt')],
@@ -30,10 +32,18 @@ module.exports = {
     ],
     find: [],
     get: [],
-    create: [],
-    update: [],
-    patch: [],
-    remove: []
+    create: [
+      updateTrainingParents(),
+    ],
+    update: [
+      updateTrainingParents(),
+    ],
+    patch: [
+      updateTrainingParents(),
+    ],
+    remove: [
+      updateTrainingParents(),
+    ]
   },
 
   error: {

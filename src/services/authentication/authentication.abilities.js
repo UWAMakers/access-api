@@ -8,7 +8,7 @@ const resolveAction = createAliasResolver({
   delete: 'remove'       // use 'delete' or 'remove'
 });
 
-const defineRulesFor = (user) => {
+const defineRulesFor = async (user, app) => {
   // also see https://casl.js.org/v5/en/guide/define-rules
   const { can, cannot, rules } = new AbilityBuilder();
 
@@ -21,6 +21,7 @@ const defineRulesFor = (user) => {
   if (user.roles.includes('admin')) {
     can('manage', 'trainings');
     can('manage', 'trainingItems');
+    can('manage', 'inductions');
     can('read', 'completions');
     can('read', 'users');
     can('update', 'users', ['displayName', 'preferences']);
@@ -28,6 +29,10 @@ const defineRulesFor = (user) => {
   }
 
   const userId = (field = '_id') => ({ [field]: { $in: [`${user._id}`] } });
+  const inductItems = await app.service('training-items').find({
+    query: { inductorIds: user._id, $select: { _id: 1 } },
+    paginate: false,
+  });
 
   can('read', 'trainings');
   can('read', 'trainingItems');
@@ -36,11 +41,19 @@ const defineRulesFor = (user) => {
   can('update', 'users', ['displayName', 'preferences'], userId());
   cannot('delete', 'users', userId());
 
+  if (inductItems.length) {
+    const itemId = { $in: inductItems.map(({ _id }) => _id) };
+    can('read', 'inductions', { ...userId('inductorId'), itemId });
+    can('create', 'inductions', { ...userId('inductorId'), itemId });
+    can('update', 'inductions', { ...userId('inductorId'), itemId });
+    can('read', 'users');
+  }
+
   return rules;
 };
 
-const defineAbilitiesFor = (user) => {
-  const rules = defineRulesFor(user);
+const defineAbilitiesFor = async (user, app) => {
+  const rules = await defineRulesFor(user, app);
 
   return makeAbilityFromRules(rules, { resolveAction });
 };

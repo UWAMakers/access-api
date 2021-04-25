@@ -1,22 +1,18 @@
-// completions-model.js - A mongoose model
+// inductions-model.js - A mongoose model
 // 
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
 module.exports = function (app) {
-  const modelName = 'completions';
+  const modelName = 'inductions';
   const mongooseClient = app.get('mongooseClient');
   const { Schema } = mongooseClient;
   const schema = new Schema({
-    trainingId: { type: mongooseClient.Types.ObjectId },
-    userId: { type: mongooseClient.Types.ObjectId },
-    status: { type: String, required: true, enum: ['pending', 'complete'] },
-    items: [{
-      itemId: { type: mongooseClient.Types.ObjectId },
+    itemId: { type: mongooseClient.Types.ObjectId },
+    inductorId: { type: mongooseClient.Types.ObjectId },
+    keys: [{
+      key: {type: String, required: true },
+      userIds: [{ type: mongooseClient.Types.ObjectId }],
       expiresAt: { type: Date },
-      inductionId: { type: mongooseClient.Types.ObjectId },
-      notified: { type: Boolean, default: false },
-      confirmed: { type: Boolean, default: false },
-      score: { type: Number },
     }],
   }, {
     timestamps: true

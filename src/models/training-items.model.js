@@ -11,6 +11,7 @@ module.exports = function (app) {
     desc: { type: String },
     type: { type: String, required: true, enum: ['comment', 'quiz', 'completion', 'induction'] },
     url: { type: String },
+    checklistUrl: { type: String },
     csvUrl: { type: String },
     trainingId: { type: mongooseClient.Types.ObjectId },
     inductorIds: { type: [mongooseClient.Types.ObjectId] },
