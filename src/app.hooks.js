@@ -1,22 +1,30 @@
 // Application hooks that run for every service
-const { stashBefore } = require('feathers-hooks-common');
+const { stashBefore, iff } = require('feathers-hooks-common');
 
 module.exports = {
   before: {
     all: [],
     find: [],
     get: [
-      stashBefore('existing'),
+      iff(({ service }) => service.options && service.options.Model, [
+        stashBefore('existing'),
+      ]),
     ],
     create: [],
     update: [
-      stashBefore('existing'),
+      iff(({ service }) => service.options && service.options.Model, [
+        stashBefore('existing'),
+      ]),
     ],
     patch: [
-      stashBefore('existing'),
+      iff(({ service }) => service.options && service.options.Model, [
+        stashBefore('existing'),
+      ]),
     ],
     remove: [
-      stashBefore('existing'),
+      iff(({ service }) => service.options && service.options.Model, [
+        stashBefore('existing'),
+      ]),
     ]
   },
 
