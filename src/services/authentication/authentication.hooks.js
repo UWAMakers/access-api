@@ -15,10 +15,10 @@ module.exports = {
     find: [],
     get: [],
     create: [
-      context => {
+      async (context) => {
         const { user } = context.result;
         if (!user) return context;
-        const ability = defineAbilitiesFor(user);
+        const ability = await defineAbilitiesFor(user, context.app);
         context.result.ability = ability;
         context.result.rules = ability.rules;
 

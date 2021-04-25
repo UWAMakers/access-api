@@ -8,6 +8,7 @@ module.exports = function (app) {
     ref: { type: String },
     desc: { type: String },
     itemIds: { type: [mongooseClient.Types.ObjectId] },
+    parentIds: { type: [mongooseClient.Types.ObjectId] },
   }, {
     timestamps: true
   });
