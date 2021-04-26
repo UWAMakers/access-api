@@ -54,7 +54,6 @@ module.exports = (options = {}) => {
           throw new GeneralError(response.errors);
         }
       } catch (err) {
-        console.log(err);
         throw new GeneralError(err);
       }
     }
