@@ -28,5 +28,6 @@
   "mongodb": "MONGO_URI",
   "authEndpoint": "AUTH_ENDPOINT",
   "mailchimpApiKey": "MAILCHIMP_API_KEY",
-  "mailchimpMailListId": "MAILCHIMP_LIST_ID"
+  "mailchimpMailListId": "MAILCHIMP_LIST_ID",
+  "mailchimpServerPrefix": "MAILCHIMP_SERVER_PREFIX"
 }
