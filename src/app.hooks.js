@@ -2,7 +2,7 @@
 const { stashBefore, iff } = require('feathers-hooks-common');
 
 const stashExisting = iff(
-  ({ service, id }) => service.options && service.options.Model && /^(\dabcdef){24}$/i.test(`${id}`),
+  ({ service, id }) => service.options && service.options.Model && /^[\dabcdef]{24}$/i.test(`${id}`),
   [stashBefore('existing')],
 );
 

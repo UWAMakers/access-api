@@ -11,7 +11,7 @@ module.exports = (options = {}) => {
     const { app, id, service, params } = context;
     const { user } = params;
 
-    if (/^(\dabcdef){24}$/i.test(`${id}`) || !user) return context;
+    if (/^[\dabcdef]{24}$/i.test(`${id}`) || !user) return context;
 
     const [induction] = await service.find({
       query: {
