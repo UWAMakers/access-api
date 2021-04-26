@@ -26,5 +26,12 @@
     }
   },
   "mongodb": "MONGO_URI",
-  "authEndpoint": "AUTH_ENDPOINT"
+  "authEndpoint": "AUTH_ENDPOINT",
+  "mongoWhitelist": [
+    "$eq", "$not", "$nor", "$and", "$elemMatch", "$all", "$size", "$exists", "$type",
+    "$regexp", "$regex", "$options",
+    "$text", "$search", "$language", "$caseSensitive", "$diacriticSensitive",
+    "$month", "$year", "$hour", "$minute", "$seconds", "$milliseconds", "$week",
+    "$dayOfYear", "$dayOfMonth", "$dayOfWeek"
+  ]
 }

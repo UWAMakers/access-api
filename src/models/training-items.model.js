@@ -17,7 +17,7 @@ module.exports = function (app) {
     inductorIds: { type: [mongooseClient.Types.ObjectId] },
     required: { type: Boolean, default: true },
     requiredScore: { type: Number },
-    expiry: { type: Number },
+    expiry: { type: Number }, // weeks
   }, {
     timestamps: true
   });
