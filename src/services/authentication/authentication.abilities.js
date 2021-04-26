@@ -40,6 +40,8 @@ const defineRulesFor = async (user, app) => {
   can('read', 'users', userId());
   can('update', 'users', ['displayName', 'preferences'], userId());
   cannot('delete', 'users', userId());
+  can('create', 'reviews', userId('userId'), ['itemId', 'userId']);
+  can('update', 'reviews', userId('userId'));
 
   if (inductItems.length) {
     const itemId = { $in: inductItems.map(({ _id }) => _id) };

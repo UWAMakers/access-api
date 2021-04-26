@@ -14,6 +14,7 @@ module.exports = function (app) {
       itemId: { type: mongooseClient.Types.ObjectId },
       expiresAt: { type: Date },
       inductionId: { type: mongooseClient.Types.ObjectId },
+      reviewId: { type: mongooseClient.Types.ObjectId },
       confirmed: { type: Boolean },
       score: { type: Number },
     }],

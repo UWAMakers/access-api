@@ -1,23 +1,15 @@
-// trainingItems-model.js - A mongoose model
+// review-model.js - A mongoose model
 // 
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
 module.exports = function (app) {
-  const modelName = 'trainingItems';
+  const modelName = 'review';
   const mongooseClient = app.get('mongooseClient');
   const { Schema } = mongooseClient;
   const schema = new Schema({
-    name: { type: String, required: true },
-    desc: { type: String },
-    type: { type: String, required: true, enum: ['comment', 'quiz', 'completion', 'induction', 'review'] },
-    url: { type: String },
-    checklistUrl: { type: String },
-    csvUrl: { type: String },
-    trainingId: { type: mongooseClient.Types.ObjectId },
-    inductorIds: { type: [mongooseClient.Types.ObjectId] },
-    required: { type: Boolean, default: true },
-    requiredScore: { type: Number },
-    expiry: { type: Number }, // weeks
+    itemId: { type: mongooseClient.Types.ObjectId },
+    userId: { type: mongooseClient.Types.ObjectId },
+    confirmedAt: { type: Date },
   }, {
     timestamps: true
   });
