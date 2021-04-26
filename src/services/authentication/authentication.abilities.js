@@ -40,7 +40,7 @@ const defineRulesFor = async (user, app) => {
   can('read', 'users', userId());
   can('update', 'users', ['displayName', 'preferences'], userId());
   cannot('delete', 'users', userId());
-  can('create', 'reviews', userId('userId'), ['itemId', 'userId']);
+  can('create', 'reviews', userId('userId'), ['itemId', 'userId', 'url']);
   can('update', 'reviews', userId('userId'));
 
   if (inductItems.length) {

@@ -9,6 +9,7 @@ module.exports = function (app) {
   const schema = new Schema({
     itemId: { type: mongooseClient.Types.ObjectId },
     userId: { type: mongooseClient.Types.ObjectId },
+    url: { type: String },
     confirmedAt: { type: Date },
   }, {
     timestamps: true
