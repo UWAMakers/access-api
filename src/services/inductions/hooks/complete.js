@@ -33,7 +33,7 @@ module.exports = (options = {}) => {
     const trainingId = await addItemToCompletion(context, {
       itemId: induction.itemId,
       inductionId: induction._id,
-      confirmed: true,
+      confirmedAt: induction.createdAt,
       expiresAt: item.expiry ? moment(induction.createdAt).add(item.expiry, 'weeks') : null,
     });
 

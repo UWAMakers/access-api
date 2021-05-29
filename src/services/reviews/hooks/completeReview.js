@@ -20,8 +20,8 @@ module.exports = (options = {}) => {
     await addItemToCompletion(context, {
       itemId: result.itemId,
       reviewId: id,
-      confirmed: true,
-      expiresAt: item.expiry ? moment(result.createdAt).add(item.expiry, 'weeks') : null,
+      confirmedAt: result.confirmedAt,
+      expiresAt: item.expiry ? moment(result.confirmedAt).add(item.expiry, 'weeks') : null,
     });
 
     return context;
