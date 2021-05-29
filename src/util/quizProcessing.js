@@ -28,31 +28,39 @@ const getTimestamp = (item) => {
   return moment.tz(item[key], 'DD/MM/YYYY HH:mm:ss', 'Australia/Perth');
 };
 
-const loadScores = async (url) => {
-  const csv = await axios.get(url);
-  const results = Papa.parse(csv, {
+const loadScores = async ({ csvUrl, expiry }) => {
+  const csv = await axios.get(csvUrl);
+  const rawResults = Papa.parse(csv, {
     header: true
   });
-  return results.map(item => ({
+  const now = Date.now();
+  const results = rawResults.map(item => ({
     username: getUsername(item),
     timestamp: getTimestamp(item),
     score: getScore(item),
-  }));
+  })).filter(v => !expiry || v.timestamp.clone().add(expiry, 'weeks').valueOf() >= now);
+  return _.uniqBy(_.sortBy(results, [(v) => v.score * -1, (v) => -1 * v.timestamp.valueOf()]), 'username');
 };
 
 const processQuizItem = async (app, item) => {
-  const results = await loadScores(item.csvUrl);
+  const allResults = await loadScores(item);
   const users = await app.service('users').find({
     query: {
-      username: { $in: _.uniq(results.map(r => r.username)) },
+      username: { $in: _.uniq(allResults.map(r => r.username)) },
       $select: { _id: 1, username: 1 },
+    },
+    paginate: false,
+  });
+  const trainings = await app.service('trainings').find({
+    query: {
+      itemIds: item._id,
     },
     paginate: false,
   });
   const allCompletions = await app.service('completions').find({
     query: {
       userId: { $in: users.map(u => u._id) },
-      'items.itemId': item._id,
+      trainingId: { $in: trainings.map(t => t._id) },
     },
     paginate: false,
   });
@@ -60,12 +68,52 @@ const processQuizItem = async (app, item) => {
   await _.chunk(users, 20).reduce(async (a, userChunk) => {
     await a;
     await Promise.all(userChunk.map(async (user) => {
-
+      const result = allResults.find(r => r.username === user.username);
+      if (!result) return;
+      await Promise.all(trainings.map(async (training) => {
+        const completion = allCompletions
+          .find(c => `${c.userId}` === `${user._id}` && `${c.trainingId}` === `${training._id}`);
+        const compItem = {
+          itemId: item._id,
+          score: result.score,
+          confirmedAt: result.timestamp,
+        };
+        if (completion) {
+          const existingItem = completion.items.find(i => `${i.itemId}` === `${compItem.itemId}`);
+          if (existingItem && moment(existingItem.confirmedAt).valueOf() === result.timestamp.valueOf()) return;
+          await app.service('completions').patch(completion._id, {
+            ...completion,
+            items: [
+              ..._.get(completion, 'items', []).filter((i) => `${i.itemId}` !== `${compItem.itemId}`),
+              compItem,
+            ],
+          }, { training });
+        } else {
+          await app.service('completions').create({
+            trainingId: training._id,
+            userId: user._id,
+            status: 'pending',
+            items: [compItem],
+          }, { training });
+        }
+      }));
     }));
+  }, Promise.resolve());
+};
+
+const processQuizzes = async (app) => {
+  const items = await app.service('training-items').find({
+    query: { type: 'quiz', csvUrl: { $exist: true } },
+    paginate: false,
+  });
+  await items.reduce(async (a, item) => {
+    await a;
+    await processQuizItem(app, item);
   }, Promise.resolve());
 };
 
 module.exports = {
   loadScores,
   processQuizItem,
+  processQuizzes,
 };

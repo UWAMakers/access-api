@@ -8,7 +8,7 @@ module.exports = (options = {}) => {
   return async context => {
     checkContext(context, 'after', ['patch', 'update']);
 
-    const { app, result, existing, id, params } = context;
+    const { result, existing, id, params } = context;
     const { user } = params;
 
     if (
@@ -16,12 +16,10 @@ module.exports = (options = {}) => {
       || moment(result.confirmedAt).valueOf() === moment(existing.confirmedAt).valueOf()
     ) return context;
 
-    const item = await app.service('training-items').get(result.itemId);
     await addItemToCompletion(context, {
       itemId: result.itemId,
       reviewId: id,
       confirmedAt: result.confirmedAt,
-      expiresAt: item.expiry ? moment(result.confirmedAt).add(item.expiry, 'weeks') : null,
     });
 
     return context;

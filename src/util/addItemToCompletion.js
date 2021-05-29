@@ -20,15 +20,15 @@ module.exports = async (context, compItem) => {
     paginate: false,
   });
 
-  await Promise.all(trainings.map(async (train) => {
-    const completion = completions.find(c => `${c.trainingId}` === `${train._id}`);
+  await Promise.all(trainings.map(async (training) => {
+    const completion = completions.find(c => `${c.trainingId}` === `${training._id}`);
     if (!completion) {
       await app.service('completions').create({
-        trainingId: train._id,
+        trainingId: training._id,
         userId: user._id,
         status: 'pending',
         items: [compItem],
-      });
+      }, { training });
     } else {
       await app.service('completions').patch(completion._id, {
         ...completion,
@@ -36,7 +36,7 @@ module.exports = async (context, compItem) => {
           ..._.get(completion, 'items', []).filter((i) => `${i.itemId}` !== `${compItem.itemId}`),
           compItem,
         ],
-      });
+      }, { training });
     }
   }));
 
