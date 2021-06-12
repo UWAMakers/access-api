@@ -39,7 +39,7 @@ module.exports = (options = {}) => {
     const resultJoinedAt = data?.preferences?.joinedAt;
 
     const isJoining = !existingJoinedAt && resultJoinedAt;
-    const isLeaving = existingJoinedAt && !resultJoinedAt;
+    const isLeaving = (existingJoinedAt && !resultJoinedAt) || context.method === 'remove';
 
     if (isJoining || isLeaving) {
       const status = isJoining ? 'subscribed' : 'unsubscribed';
