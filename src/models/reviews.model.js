@@ -1,23 +1,16 @@
-// completions-model.js - A mongoose model
+// review-model.js - A mongoose model
 // 
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
 module.exports = function (app) {
-  const modelName = 'completions';
+  const modelName = 'review';
   const mongooseClient = app.get('mongooseClient');
   const { Schema } = mongooseClient;
   const schema = new Schema({
-    trainingId: { type: mongooseClient.Types.ObjectId },
+    itemId: { type: mongooseClient.Types.ObjectId },
     userId: { type: mongooseClient.Types.ObjectId },
-    status: { type: String, required: true, enum: ['pending', 'complete'] },
-    items: [{
-      itemId: { type: mongooseClient.Types.ObjectId },
-      confirmedAt: { type: Date },
-      inductionId: { type: mongooseClient.Types.ObjectId },
-      reviewId: { type: mongooseClient.Types.ObjectId },
-      score: { type: Number },
-      status: { type: String, enum: ['pending', 'complete'] },
-    }],
+    url: { type: String },
+    confirmedAt: { type: Date },
   }, {
     timestamps: true
   });

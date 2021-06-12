@@ -9,7 +9,7 @@ module.exports = function (app) {
   const schema = new Schema({
     name: { type: String, required: true },
     desc: { type: String },
-    type: { type: String, required: true, enum: ['comment', 'quiz', 'completion', 'induction'] },
+    type: { type: String, required: true, enum: ['comment', 'quiz', 'completion', 'induction', 'review'] },
     url: { type: String },
     checklistUrl: { type: String },
     csvUrl: { type: String },

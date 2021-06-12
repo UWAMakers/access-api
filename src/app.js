@@ -16,6 +16,7 @@ const middleware = require('./middleware');
 const services = require('./services');
 const appHooks = require('./app.hooks');
 const channels = require('./channels');
+const scheduleJobs = require('./util/scheduleJobs');
 
 const authentication = require('./authentication');
 
@@ -52,6 +53,7 @@ app.configure(services);
 app.configure(channels);
 
 app.configure(casl());
+app.configure(scheduleJobs);
 
 // Configure a middleware for 404s and the error handler
 app.use(express.notFound());
