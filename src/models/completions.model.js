@@ -16,7 +16,7 @@ module.exports = function (app) {
       inductionId: { type: mongooseClient.Types.ObjectId },
       reviewId: { type: mongooseClient.Types.ObjectId },
       score: { type: Number },
-      status: { type: String, required: true, enum: ['pending', 'complete'] },
+      status: { type: String, enum: ['pending', 'complete'] },
     }],
   }, {
     timestamps: true
