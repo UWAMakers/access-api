@@ -1,11 +1,12 @@
 /* eslint-disable no-unused-vars */
 const { NotImplemented } = require('@feathersjs/errors');
-const axios = require('axios');
+const app = require('../../app');
 const messages = require('./createMessage');
 
 exports.Feedback = class Feedback {
-  constructor(options) {
+  constructor(options, app) {
     this.options = options || {};
+    this.app = app;
   }
 
   async find(params) {
@@ -21,9 +22,12 @@ exports.Feedback = class Feedback {
     const firstName = params.user.firstName || 'Anonymous';
     const lastName = params.user.lastName || 'Turtle';
     const fullName = `${firstName} ${lastName}`;
-    if (process.env.FEEDBACK_WEBHOOK) {
-      axios.post(process.env.FEEDBACK_WEBHOOK, messages.createMessage(fullName, msg));
-    }
+    const msgJson = messages.createMessage(fullName, msg)
+    this.app.service('notifications').create({
+      slack: {
+        msgJson
+      }
+    })
     return data;
   }
 

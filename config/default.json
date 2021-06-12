@@ -25,11 +25,13 @@
       "passwordField": "password"
     }
   },
+  "ENV": "ENV",
   "mongodb": "MONGO_URI",
   "authEndpoint": "AUTH_ENDPOINT",
   "SMTP_HOST": "SMTP_HOST",
   "SMTP_USER": "SMTP_USER",
   "SMTP_PASSWORD": "SMTP_PASSWORD",
+  "FEEDBACK_WEBHOOK": "FEEDBACK_WEBHOOK",
   "mongoWhitelist": [
     "$eq", "$not", "$nor", "$and", "$elemMatch", "$all", "$size", "$exists", "$type",
     "$regexp", "$regex", "$options",
