@@ -5,7 +5,7 @@ const notifme = require('@feathers-nuxt/feathers-notifme');
 module.exports = function (app) {
   const options = {
     paginate: app.get('paginate'),
-    useNotificationCatcher: false,
+    useNotificationCatcher: true,
     channels: {
       email: {
         providers: [

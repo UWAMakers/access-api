@@ -2,8 +2,6 @@ const axios = require('axios');
 const { LocalStrategy } = require('@feathersjs/authentication-local');
 const { NotAuthenticated } = require('@feathersjs/errors');
 
-const fix = (name = '') => name.trim().replace(/\s+\(\d+\)$/, '');
-
 if (process.env.NODE_ENV !== 'production') {
   console.warn('Warning: not in production mode, enabling demo user'); // eslint-disable-line
 }
@@ -35,14 +33,12 @@ class PhemeStrategy extends LocalStrategy {
     if (!body.success) throw new NotAuthenticated(body.message);
     const users = await this.app.service('users').find({ query: { username: body.user.username }, paginate: false });
     let user = null;
-    const fixedFirstName = fix(body.user.firstName);
-
     const userObj = {
       username: body.user.username,
       email: body.user.email,
-      firstName: fixedFirstName,
+      firstName: body.user.firstname,
       lastName: body.user.lastname,
-      displayName: fixedFirstName,
+      displayName: body.user.firstname,
     };
     if (users.length === 0) {
       user = await this.app.service('users').create(userObj);

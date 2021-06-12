@@ -12,10 +12,11 @@ module.exports = function (app) {
     status: { type: String, required: true, enum: ['pending', 'complete'] },
     items: [{
       itemId: { type: mongooseClient.Types.ObjectId },
-      expiresAt: { type: Date },
+      confirmedAt: { type: Date },
       inductionId: { type: mongooseClient.Types.ObjectId },
-      confirmed: { type: Boolean },
+      reviewId: { type: mongooseClient.Types.ObjectId },
       score: { type: Number },
+      status: { type: String, required: true, enum: ['pending', 'complete'] },
     }],
   }, {
     timestamps: true

@@ -1,6 +1,5 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { authorize } = require('feathers-casl').hooks;
-const mailChimpSync = require('./hooks/mailChimpSync');
 
 module.exports = {
   before: {
@@ -15,15 +14,12 @@ module.exports = {
       authorize(), // make sure this hook runs always last
     ],
     update: [
-      mailChimpSync(),
       authorize(), // make sure this hook runs always last
     ],
     patch: [
-      mailChimpSync(),
       authorize(), // make sure this hook runs always last
     ],
     remove: [
-      mailChimpSync(),
       authorize(), // make sure this hook runs always last
     ],
   },

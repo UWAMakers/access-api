@@ -1,61 +1,22 @@
 const { checkContext } = require('feathers-hooks-common');
-const client = require('@mailchimp/mailchimp_marketing');
-const { GeneralError } = require('@feathersjs/errors');
+// const _ = require('lodash');
 
-const updateMailingList = async (client, mailListId, user, status) => {
-  const { email, firstName, lastName, displayName } = user;
-  return client.lists.batchListMembers(mailListId, {
-    members: [
-      {
-        email_address: email,
-        status,
-        merge_fields: {
-          NAME: displayName || firstName,
-          FULLNAME: `${firstName} ${lastName}`,
-          FNAME: firstName,
-          LNAME: lastName,
-        },
-      },
-    ],
-    update_existing: true,
-  });
-};
-
-// eslint-disable-next-line
+// eslint-disable-next-line no-unused-vars
 module.exports = (options = {}) => {
-  return async (context) => {
-    checkContext(context, 'before', ['update', 'patch', 'remove']);
-    const { existing, data } = context;
-    const mailchimpApiKey = context.app.settings.mailchimpApiKey;
-    const mailListId = context.app.settings.mailchimpListId;
-    const mailchimpServerPrefix = context.app.settings.mailchimpServerPrefix;
+  return async context => {
+    checkContext(context, 'after', ['create', 'update', 'patch']);
 
-    client.setConfig({
-      apiKey: mailchimpApiKey,
-      server: mailchimpServerPrefix,
-    });
+    const { result, params } = context;
 
-    const existingJoinedAt = existing?.preferences?.joinedAt ?? false;
-    const resultJoinedAt = data?.preferences?.joinedAt;
+    const { existing } = params;
+    const isJoining = !existing.preferences.joinedAt && result.joinedAt;
+    const hasLeft = existing.preferences.joinedAt && !result.joinedAt;
+    console.log(result);
+    if (isJoining) {
+      // add to result.email to mail list
 
-    const isJoining = !existingJoinedAt && resultJoinedAt;
-    const isLeaving = (existingJoinedAt && !resultJoinedAt) || context.method === 'remove';
-
-    if (isJoining || isLeaving) {
-      const status = isJoining ? 'subscribed' : 'unsubscribed';
-      try {
-        const response = await updateMailingList(
-          client,
-          mailListId,
-          existing,
-          status
-        );
-        if (response.errors.length) {
-          throw new GeneralError(response.errors);
-        }
-      } catch (err) {
-        throw new GeneralError(err);
-      }
+    } else if (hasLeft) {
+      // remove result.email from mailing list
     }
     return context;
   };

@@ -1,3 +1,4 @@
+// Application hooks that run for every service
 const stashExisting = async (context) => {
   const { service, id, params } = context;
   if (service.options && service.options.Model && /^[\dabcdef]{24}$/i.test(`${id}`) && !params.skipExisting) {
@@ -17,7 +18,9 @@ module.exports = {
     update: [
       stashExisting,
     ],
-    patch: [stashExisting],
+    patch: [
+      stashExisting,
+    ],
     remove: [
       stashExisting,
     ]
