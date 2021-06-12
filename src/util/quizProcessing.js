@@ -29,8 +29,8 @@ const getTimestamp = (item) => {
 };
 
 const loadScores = async ({ csvUrl, expiry }) => {
-  const csv = await axios.get(csvUrl);
-  const rawResults = Papa.parse(csv, {
+  const { data: csv } = await axios.get(csvUrl);
+  const { data: rawResults } = Papa.parse(csv, {
     header: true
   });
   const now = Date.now();
@@ -103,7 +103,7 @@ const processQuizItem = async (app, item) => {
 
 const processQuizzes = async (app) => {
   const items = await app.service('training-items').find({
-    query: { type: 'quiz', csvUrl: { $exist: true } },
+    query: { type: 'quiz', csvUrl: { $exists: true } },
     paginate: false,
   });
   await items.reduce(async (a, item) => {
