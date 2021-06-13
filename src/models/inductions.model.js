@@ -1,22 +1,27 @@
 // inductions-model.js - A mongoose model
-// 
+//
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
 module.exports = function (app) {
   const modelName = 'inductions';
   const mongooseClient = app.get('mongooseClient');
   const { Schema } = mongooseClient;
-  const schema = new Schema({
-    itemId: { type: mongooseClient.Types.ObjectId },
-    inductorId: { type: mongooseClient.Types.ObjectId },
-    keys: [{
-      key: {type: String, required: true },
-      userIds: [{ type: mongooseClient.Types.ObjectId }],
-      expiresAt: { type: Date },
-    }],
-  }, {
-    timestamps: true
-  });
+  const schema = new Schema(
+    {
+      itemId: { type: mongooseClient.Types.ObjectId },
+      inductorId: { type: mongooseClient.Types.ObjectId },
+      keys: [
+        {
+          key: { type: String, required: true },
+          userIds: [{ type: mongooseClient.Types.ObjectId }],
+          expiresAt: { type: Date },
+        },
+      ],
+    },
+    {
+      timestamps: true,
+    }
+  );
 
   // This is necessary to avoid model compilation errors in watch mode
   // see https://mongoosejs.com/docs/api/connection.html#connection_Connection-deleteModel
@@ -24,5 +29,4 @@ module.exports = function (app) {
     mongooseClient.deleteModel(modelName);
   }
   return mongooseClient.model(modelName, schema);
-  
 };

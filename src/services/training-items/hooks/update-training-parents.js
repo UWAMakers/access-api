@@ -3,7 +3,7 @@ const _ = require('lodash');
 
 // eslint-disable-next-line no-unused-vars
 module.exports = (options = {}) => {
-  return async context => {
+  return async (context) => {
     checkContext(context, 'after', ['create', 'update', 'patch', 'remove']);
 
     const { result, app, service } = context;
@@ -15,18 +15,29 @@ module.exports = (options = {}) => {
       paginate: false,
     });
 
-    await Promise.all(configs.map(async (config) => {
-      const items = await service.find({
-        query: { _id: { $in: config.itemIds }, type: 'completion' },
-        paginate: false,
-      });
-      const parentIds = items.length ? items.map(({ trainingId }) => `${trainingId}`).sort() : null;
+    await Promise.all(
+      configs.map(async (config) => {
+        const items = await service.find({
+          query: { _id: { $in: config.itemIds }, type: 'completion' },
+          paginate: false,
+        });
+        const parentIds = items.length
+          ? items.map(({ trainingId }) => `${trainingId}`).sort()
+          : null;
 
-      if (_.get(config, 'parentIds', []).map(id => `${id}`).sort().join('-') === (parentIds || []).join('-')) {
-        return;
-      }
-      await app.service('trainings').patch(config._id, { ...config, parentIds });
-    }));
+        if (
+          _.get(config, 'parentIds', [])
+            .map((id) => `${id}`)
+            .sort()
+            .join('-') === (parentIds || []).join('-')
+        ) {
+          return;
+        }
+        await app
+          .service('trainings')
+          .patch(config._id, { ...config, parentIds });
+      })
+    );
 
     return context;
   };

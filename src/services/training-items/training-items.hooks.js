@@ -7,7 +7,7 @@ module.exports = {
   before: {
     all: [authenticate('jwt')],
     find: [
-      authorize(),  // make sure this hook runs always last
+      authorize(), // make sure this hook runs always last
     ],
     get: [
       authorize(), // make sure this hook runs always last
@@ -23,7 +23,7 @@ module.exports = {
     ],
     remove: [
       authorize(), // make sure this hook runs always last
-    ]
+    ],
   },
 
   after: {
@@ -32,18 +32,10 @@ module.exports = {
     ],
     find: [],
     get: [],
-    create: [
-      updateTrainingParents(),
-    ],
-    update: [
-      updateTrainingParents(),
-    ],
-    patch: [
-      updateTrainingParents(),
-    ],
-    remove: [
-      updateTrainingParents(),
-    ]
+    create: [updateTrainingParents()],
+    update: [updateTrainingParents()],
+    patch: [updateTrainingParents()],
+    remove: [updateTrainingParents()],
   },
 
   error: {
@@ -53,6 +45,6 @@ module.exports = {
     create: [],
     update: [],
     patch: [],
-    remove: []
-  }
+    remove: [],
+  },
 };

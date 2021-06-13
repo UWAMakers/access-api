@@ -1,4 +1,5 @@
 {
   "host": "access-api-app.feathersjs.com",
-  "port": "PORT"
+  "port": "PORT",
+  "CATCH_NOTIFICATIONS": false
 }

@@ -8,7 +8,7 @@ module.exports = {
     create: [],
     update: [],
     patch: [],
-    remove: []
+    remove: [],
   },
   after: {
     all: [],
@@ -23,11 +23,11 @@ module.exports = {
         context.result.rules = ability.rules;
 
         return context;
-      }
+      },
     ],
     update: [],
     patch: [],
-    remove: []
+    remove: [],
   },
   error: {
     all: [],
@@ -36,6 +36,6 @@ module.exports = {
     create: [],
     update: [],
     patch: [],
-    remove: []
-  }
+    remove: [],
+  },
 };
