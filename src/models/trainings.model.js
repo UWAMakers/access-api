@@ -7,6 +7,7 @@ module.exports = function (app) {
     name: { type: String, required: true },
     ref: { type: String },
     desc: { type: String },
+    order: { type: Number, default: 9999999 },
     itemIds: { type: [mongooseClient.Types.ObjectId] },
     parentIds: { type: [mongooseClient.Types.ObjectId] },
   }, {
