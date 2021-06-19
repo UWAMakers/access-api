@@ -35,7 +35,7 @@ class PhemeStrategy extends LocalStrategy {
     if (!body.success) throw new NotAuthenticated(body.message);
     const users = await this.app.service('users').find({ query: { username: body.user.username }, paginate: false });
     let user = null;
-    const fixedFirstName = fix(body.user.firstName);
+    const fixedFirstName = fix(body.user.firstname);
 
     const userObj = {
       username: body.user.username,
