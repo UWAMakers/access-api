@@ -55,6 +55,7 @@
     "feathers-casl": "^0.3.1",
     "feathers-mongoose": "^8.3.1",
     "helmet": "^4.3.1",
+    "mjml": "^4.10.0",
     "moment-timezone": "^0.5.33",
     "mongodb-core": "^3.2.7",
     "mongoose": "^5.11.9",

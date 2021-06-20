@@ -12,6 +12,7 @@ module.exports = function (app) {
       inductorId: { type: mongooseClient.Types.ObjectId },
       keys: [
         {
+          emailSent: { type: Boolean, required: false },
           key: { type: String, required: true },
           userIds: [{ type: mongooseClient.Types.ObjectId }],
           expiresAt: { type: Date },

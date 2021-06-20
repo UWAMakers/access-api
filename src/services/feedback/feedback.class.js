@@ -21,14 +21,14 @@ exports.Feedback = class Feedback {
     const firstName = params.user.firstName || 'Anonymous';
     const lastName = params.user.lastName || 'Turtle';
     const fullName = `${firstName} ${lastName}`;
-    const msgJson = messages.createMessage(fullName, msg)
+    const msgJson = messages.createMessage(fullName, msg);
     this.app.service('notifications').create({
       slack: {
         msgJson,
         // Text not actually needed but notification catcher crashes without it
-        text: msg
-      }
-    })
+        text: msg,
+      },
+    });
     return data;
   }
 

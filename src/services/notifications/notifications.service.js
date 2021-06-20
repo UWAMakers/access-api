@@ -29,11 +29,8 @@ module.exports = function (app) {
         providers: [
           {
             type: 'custom',
-            send: async ({ msgJson}) => {
-              await axios.post(
-                app.get('FEEDBACK_WEBHOOK'),
-                msgJson
-              );
+            send: async ({ msgJson }) => {
+              await axios.post(app.get('FEEDBACK_WEBHOOK'), msgJson);
             },
           },
         ],

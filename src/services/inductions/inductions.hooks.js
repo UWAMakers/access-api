@@ -2,6 +2,7 @@ const { authenticate } = require('@feathersjs/authentication').hooks;
 const { authorize } = require('feathers-casl').hooks;
 const { iff } = require('feathers-hooks-common');
 const complete = require('./hooks/complete');
+const sendInductionEmail = require('./hooks/sendInductionEmail');
 
 module.exports = {
   before: {
@@ -35,9 +36,9 @@ module.exports = {
     ],
     find: [],
     get: [],
-    create: [],
+    create: [sendInductionEmail()],
     update: [],
-    patch: [],
+    patch: [sendInductionEmail()],
     remove: [],
   },
 

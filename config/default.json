@@ -33,6 +33,7 @@
   "SMTP_PASSWORD": "SMTP_PASSWORD",
   "FEEDBACK_WEBHOOK": "FEEDBACK_WEBHOOK",
   "CATCH_NOTIFICATIONS": true,
+  "CLIENT_DOMAIN": "http://localhost:8080",
   "mongoWhitelist": [
     "$eq",
     "$not",
