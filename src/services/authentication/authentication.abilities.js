@@ -20,7 +20,8 @@ const defineRulesFor = async (user, app) => {
 
   if (user.roles.includes('admin')) {
     can('manage', 'trainings');
-    can('manage', 'trainingItems');
+    can('manage', 'training-items');
+    can('manage', 'notification-templates');
     can('manage', 'inductions');
     can('read', 'completions');
     can('read', 'users');
