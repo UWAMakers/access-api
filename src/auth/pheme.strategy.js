@@ -57,7 +57,7 @@ class PhemeStrategy extends LocalStrategy {
       .service('users')
       .find({ query: { username: body.user.username }, paginate: false });
     let user = null;
-    const fixedFirstName = fix(body.user.firstName);
+    const fixedFirstName = fix(body.user.firstname);
 
     const userObj = {
       username: body.user.username,

@@ -39,12 +39,13 @@ const defineRulesFor = async (user, app) => {
   });
 
   can('read', 'trainings');
-  can('read', 'trainingItems');
+  can('read', 'training-items');
   can('read', 'completions', userId('userId'));
+  can('read', 'reviews', userId('userId'));
   can('read', 'users', userId());
   can('update', 'users', ['displayName', 'preferences'], userId());
   cannot('delete', 'users', userId());
-  can('create', 'reviews', userId('userId'), ['itemId', 'userId', 'url']);
+  can('create', 'reviews', ['itemId', 'userId', 'url'], userId('userId'));
   can('update', 'reviews', userId('userId'));
 
   if (inductItems.length) {

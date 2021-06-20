@@ -30,6 +30,13 @@ module.exports = (options = {}) => {
     const mailListId = context.app.settings.mailchimpListId;
     const mailchimpServerPrefix = context.app.settings.mailchimpServerPrefix;
 
+    console.log(mailchimpApiKey);
+    if (
+      !mailchimpApiKey
+      || mailchimpApiKey === 'MAILCHIMP_API_KEY'
+      || existing.email?.includes('@example.uwa.edu.au')
+    ) return context;
+
     client.setConfig({
       apiKey: mailchimpApiKey,
       server: mailchimpServerPrefix,
@@ -52,10 +59,11 @@ module.exports = (options = {}) => {
           status
         );
         if (response.errors.length) {
-          throw new GeneralError(response.errors);
+          throw new GeneralError(response.errors[0].error);
         }
       } catch (err) {
-        throw new GeneralError(err);
+        console.error(err);
+        throw new GeneralError(err.message);
       }
     }
     return context;
