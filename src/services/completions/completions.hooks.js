@@ -1,6 +1,8 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { authorize } = require('feathers-casl').hooks;
 
+const distinct = require('../../hooks/distinct');
+
 const complete = require('./hooks/complete');
 const setStatus = require('./hooks/setStatus');
 
@@ -8,7 +10,8 @@ module.exports = {
   before: {
     all: [authenticate('jwt')],
     find: [
-      authorize(), // make sure this hook runs always last
+      authorize(),  // make sure this hook runs always last
+      distinct(),
     ],
     get: [
       authorize(), // make sure this hook runs always last
