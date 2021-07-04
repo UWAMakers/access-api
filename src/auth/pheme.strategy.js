@@ -12,28 +12,50 @@ class PhemeStrategy extends LocalStrategy {
   // eslint-disable-next-line no-unused-vars
   async authenticate(data, params) {
     const { username, password } = data;
-    const isDemoUser = process.env.NODE_ENV !== 'production' && username === '12345678' && password === 'demo';
+    const isDemoUser =
+      process.env.NODE_ENV !== 'production' &&
+      username === '12345678' &&
+      password === 'demo';
     let body = null;
     if (isDemoUser) {
-      body = { success: true, user: { username, email: '12345678@example.uwa.edu.au', firstname: 'Jo', lastname: 'Blogs' } };
+      body = {
+        success: true,
+        user: {
+          username,
+          email: '12345678@example.uwa.edu.au',
+          firstname: 'Jo',
+          lastname: 'Blogs',
+        },
+      };
     } else {
       try {
-        const res = await axios.post(`${this.app.get('authEndpoint')}/api/login`, {
-          user: username,
-          pass: password,
-          token: process.env.AUTH_TOKEN,
-        });
+        const res = await axios.post(
+          `${this.app.get('authEndpoint')}/api/login`,
+          {
+            user: username,
+            pass: password,
+            token: process.env.AUTH_TOKEN,
+          }
+        );
         body = res.data;
       } catch (err) {
-        if (err.response && err.response.status >= 400 && err.response.status < 500) {
+        if (
+          err.response &&
+          err.response.status >= 400 &&
+          err.response.status < 500
+        ) {
           throw new NotAuthenticated(err.response.data.message);
         }
         console.error(err); // eslint-disable-line
-        throw new NotAuthenticated('Unknown login issue occured, please contact an administrator.');
+        throw new NotAuthenticated(
+          'Unknown login issue occured, please contact an administrator.'
+        );
       }
     }
     if (!body.success) throw new NotAuthenticated(body.message);
-    const users = await this.app.service('users').find({ query: { username: body.user.username }, paginate: false });
+    const users = await this.app
+      .service('users')
+      .find({ query: { username: body.user.username }, paginate: false });
     let user = null;
     const fixedFirstName = fix(body.user.firstname);
 

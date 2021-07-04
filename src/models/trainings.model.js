@@ -1,4 +1,3 @@
-
 module.exports = function (app) {
   const modelName = 'trainings';
   const mongooseClient = app.get('mongooseClient');
@@ -20,5 +19,4 @@ module.exports = function (app) {
     mongooseClient.deleteModel(modelName);
   }
   return mongooseClient.model(modelName, schema);
-  
 };
