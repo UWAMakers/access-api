@@ -30,7 +30,7 @@ module.exports = {
     ],
     remove: [
       authorize(), // make sure this hook runs always last
-    ]
+    ],
   },
 
   after: {
@@ -39,16 +39,10 @@ module.exports = {
     ],
     find: [],
     get: [],
-    create: [
-      complete(),
-    ],
-    update: [
-      complete(),
-    ],
-    patch: [
-      complete(),
-    ],
-    remove: []
+    create: [complete()],
+    update: [complete()],
+    patch: [complete()],
+    remove: [],
   },
 
   error: {
@@ -58,6 +52,6 @@ module.exports = {
     create: [],
     update: [],
     patch: [],
-    remove: []
-  }
+    remove: [],
+  },
 };

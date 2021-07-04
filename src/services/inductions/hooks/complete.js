@@ -4,7 +4,7 @@ const addItemToCompletion = require('../../../util/addItemToCompletion');
 
 // eslint-disable-next-line no-unused-vars
 module.exports = (options = {}) => {
-  return async context => {
+  return async (context) => {
     checkContext(context, 'before', ['get']);
 
     const { id, service, params } = context;
@@ -18,7 +18,11 @@ module.exports = (options = {}) => {
           $elemMatch: {
             key: id,
             expiresAt: { $gte: new Date() },
-            $or: [{ userIds: { $exists: false } }, { userIds: [] }, { userIds: user._id }],
+            $or: [
+              { userIds: { $exists: false } },
+              { userIds: [] },
+              { userIds: user._id },
+            ],
           },
         },
         $limit: 1,
@@ -26,7 +30,10 @@ module.exports = (options = {}) => {
       paginate: false,
     });
 
-    if (!induction) throw new errors.NotFound('Induction doesn\'t exist, or your link has expired');
+    if (!induction)
+      throw new errors.NotFound(
+        "Induction doesn't exist, or your link has expired"
+      );
 
     const trainingId = await addItemToCompletion(context, {
       itemId: induction.itemId,
