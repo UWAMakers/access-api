@@ -9,9 +9,9 @@ module.exports = function (app) {
   const schema = new Schema({
     subject: { type: String, required: true },
     body: { type: String, required: true },
-    to: { type: String },
-    cc: { type: String },
-    bcc: { type: String },
+    to: { type: [String] },
+    cc: { type: [String] },
+    bcc: { type: [String] },
     action: {
       type: String,
       required: true,
