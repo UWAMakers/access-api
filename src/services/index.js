@@ -5,6 +5,7 @@ const completions = require('./completions/completions.service.js');
 const feedback = require('./feedback/feedback.service.js');
 const inductions = require('./inductions/inductions.service.js');
 const reviews = require('./reviews/reviews.service.js');
+const notificationTemplates = require('./notification-templates/notification-templates.service.js');
 const notifications = require('./notifications/notifications.service.js');
 // eslint-disable-next-line no-unused-vars
 module.exports = function (app) {
@@ -15,5 +16,6 @@ module.exports = function (app) {
   app.configure(feedback);
   app.configure(inductions);
   app.configure(reviews);
+  app.configure(notificationTemplates);
   app.configure(notifications);
 };
