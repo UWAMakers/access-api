@@ -1,7 +1,7 @@
 const { checkContext } = require('feathers-hooks-common');
 const errors = require('@feathersjs/errors');
 const {
-  createActionEmailBody,
+  createInductionEmailBody,
   getActionEmailHtml,
 } = require('../../../util/email/index');
 
@@ -25,7 +25,7 @@ module.exports = (options = {}) => {
     }
     const { name: trainingItemName } = trainingItem;
     const { displayName: inductorName } = inductor;
-    const confirmInductionBodyText = createActionEmailBody(
+    const confirmInductionBodyText = createInductionEmailBody(
       inductorName,
       trainingItemName
     );
@@ -46,18 +46,18 @@ module.exports = (options = {}) => {
             const user = usersToConfirm.find(
               ({ _id }) => `${userId}` === `${_id}`
             );
-            const emailBody = getActionEmailHtml(
-              confirmInductionBodyText,
-              user.firstName,
-              'Confirm Induction',
-              inductionUrl
-            );
+            const emailBody = getActionEmailHtml({
+              bodyText: confirmInductionBodyText,
+              firstName: user.firstName,
+              actionButtonText: 'Confirm Induction',
+              actionButtonLink: inductionUrl
+            });
             return app.service('notifications').create({
               email: {
                 html: emailBody,
                 to: user.email,
-                from: app.get('SMTP_USER'),
-                subject: 'Manual email induction',
+                from: app.get('EMAIL_FROM') || app.get('SMTP_USER'),
+                subject: 'Manual email induction verification',
               },
             });
           })

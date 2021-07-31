@@ -2,9 +2,20 @@ const { authenticate } = require('@feathersjs/authentication').hooks;
 const { authorize } = require('feathers-casl').hooks;
 
 const distinct = require('../../hooks/distinct');
+const ifChangedTo = require('../../hooks/ifChangedTo');
+const notify = require('../../hooks/notify');
 
 const complete = require('./hooks/complete');
 const setStatus = require('./hooks/setStatus');
+
+const completeNotify = ifChangedTo({ status: 'complete' }, [
+  notify('training_complete', 'userId', { trainingIdField: 'trainingId' }),
+  notify('training_change_bulk', 'userId', { trainingIdField: 'trainingId', status: 'complete' }),
+]);
+const expireNotify = ifChangedTo({ status: 'pending' }, [
+  notify('training_expired', 'userId', { trainingIdField: 'trainingId' }),
+  notify('training_change_bulk', 'userId', { trainingIdField: 'trainingId', status: 'expired' }),
+]);
 
 module.exports = {
   before: {
@@ -39,9 +50,20 @@ module.exports = {
     ],
     find: [],
     get: [],
-    create: [complete()],
-    update: [complete()],
-    patch: [complete()],
+    create: [
+      complete(),
+      completeNotify,
+    ],
+    update: [
+      complete(),
+      completeNotify,
+      expireNotify,
+    ],
+    patch: [
+      complete(),
+      completeNotify,
+      expireNotify,
+    ],
     remove: [],
   },
 
