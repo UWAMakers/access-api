@@ -16,17 +16,11 @@ module.exports = {
   before: {
     all: [],
     find: [],
-    get: [
-      stashExisting,
-    ],
+    get: [stashExisting],
     create: [],
-    update: [
-      stashExisting,
-    ],
+    update: [stashExisting],
     patch: [stashExisting],
-    remove: [
-      stashExisting,
-    ]
+    remove: [stashExisting],
   },
 
   after: {
@@ -36,7 +30,7 @@ module.exports = {
     create: [],
     update: [],
     patch: [],
-    remove: []
+    remove: [],
   },
 
   error: {
@@ -46,6 +40,6 @@ module.exports = {
     create: [],
     update: [],
     patch: [],
-    remove: []
-  }
+    remove: [],
+  },
 };

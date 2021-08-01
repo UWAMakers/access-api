@@ -37,6 +37,7 @@
     "ignore": []
   },
   "dependencies": {
+    "@feathers-nuxt/feathers-notifme": "^1.0.1-beta.1",
     "@feathersjs/authentication": "^4.5.11",
     "@feathersjs/authentication-local": "^4.5.11",
     "@feathersjs/authentication-oauth": "^4.5.11",
@@ -54,9 +55,11 @@
     "feathers-casl": "^0.3.1",
     "feathers-mongoose": "^8.3.1",
     "helmet": "^4.3.1",
+    "mjml": "^4.10.0",
     "moment-timezone": "^0.5.33",
     "mongodb-core": "^3.2.7",
     "mongoose": "^5.11.9",
+    "notification-catcher": "^1.2.1",
     "papaparse": "^5.3.0",
     "passport-custom": "^1.1.1",
     "serve-favicon": "^2.5.0",

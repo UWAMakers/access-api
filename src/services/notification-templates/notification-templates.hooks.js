@@ -1,12 +1,11 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { authorize } = require('feathers-casl').hooks;
-const completeReview = require('./hooks/completeReview');
 
 module.exports = {
   before: {
     all: [authenticate('jwt')],
     find: [
-      authorize(), // make sure this hook runs always last
+      authorize(),  // make sure this hook runs always last
     ],
     get: [
       authorize(), // make sure this hook runs always last
@@ -22,7 +21,7 @@ module.exports = {
     ],
     remove: [
       authorize(), // make sure this hook runs always last
-    ],
+    ]
   },
 
   after: {
@@ -32,9 +31,9 @@ module.exports = {
     find: [],
     get: [],
     create: [],
-    update: [completeReview()],
-    patch: [completeReview()],
-    remove: [],
+    update: [],
+    patch: [],
+    remove: []
   },
 
   error: {
@@ -44,6 +43,6 @@ module.exports = {
     create: [],
     update: [],
     patch: [],
-    remove: [],
-  },
+    remove: []
+  }
 };

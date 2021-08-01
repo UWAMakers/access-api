@@ -1,11 +1,15 @@
 // src/services/authentication/authentication.abilities.js
-const { AbilityBuilder, createAliasResolver, makeAbilityFromRules } = require('feathers-casl');
+const {
+  AbilityBuilder,
+  createAliasResolver,
+  makeAbilityFromRules,
+} = require('feathers-casl');
 
 // don't forget this, as `read` is used internally
 const resolveAction = createAliasResolver({
-  update: 'patch',       // define the same rules for update & patch
+  update: 'patch', // define the same rules for update & patch
   read: ['get', 'find'], // use 'read' as a equivalent for 'get' & 'find'
-  delete: 'remove'       // use 'delete' or 'remove'
+  delete: 'remove', // use 'delete' or 'remove'
 });
 
 const defineRulesFor = async (user, app) => {
@@ -20,7 +24,8 @@ const defineRulesFor = async (user, app) => {
 
   if (user.roles.includes('admin')) {
     can('manage', 'trainings');
-    can('manage', 'trainingItems');
+    can('manage', 'training-items');
+    can('manage', 'notification-templates');
     can('manage', 'inductions');
     can('read', 'completions');
     can('read', 'users');
@@ -64,5 +69,5 @@ const defineAbilitiesFor = async (user, app) => {
 
 module.exports = {
   defineRulesFor,
-  defineAbilitiesFor
+  defineAbilitiesFor,
 };

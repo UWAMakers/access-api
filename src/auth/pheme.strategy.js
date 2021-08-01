@@ -19,7 +19,15 @@ class PhemeStrategy extends LocalStrategy {
       password === 'demo';
     let body = null;
     if (isDemoUser) {
-      body = { success: true, user: { username, email: '12345678@example.uwa.edu.au', firstname: 'Jo', lastname: 'Blogs' } };
+      body = {
+        success: true,
+        user: {
+          username,
+          email: '12345678@example.uwa.edu.au',
+          firstname: 'Jo',
+          lastname: 'Blogs',
+        },
+      };
     } else {
       try {
         const res = await axios.post(
@@ -34,15 +42,23 @@ class PhemeStrategy extends LocalStrategy {
         );
         body = res.data;
       } catch (err) {
-        if (err.response && err.response.status >= 400 && err.response.status < 500) {
+        if (
+          err.response &&
+          err.response.status >= 400 &&
+          err.response.status < 500
+        ) {
           throw new NotAuthenticated(err.response.data.message);
         }
         console.error(err); // eslint-disable-line
-        throw new NotAuthenticated('Unknown login issue occured, please contact an administrator.');
+        throw new NotAuthenticated(
+          'Unknown login issue occured, please contact an administrator.'
+        );
       }
     }
     if (!body.success) throw new NotAuthenticated(body.message);
-    const users = await this.app.service('users').find({ query: { username: body.user.username }, paginate: false });
+    const users = await this.app
+      .service('users')
+      .find({ query: { username: body.user.username }, paginate: false });
     let user = null;
     const fixedFirstName = fix(body.user.firstname);
 
