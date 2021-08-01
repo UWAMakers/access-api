@@ -5,7 +5,11 @@ module.exports = {
     all: [],
     find: [],
     get: [],
-    create: [],
+    create: [
+      ctx => { // don't worry about this
+        ctx.params.payload = {};
+      },
+    ],
     update: [],
     patch: [],
     remove: []

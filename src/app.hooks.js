@@ -1,6 +1,12 @@
 const stashExisting = async (context) => {
-  const { service, id, params } = context;
-  if (service.options && service.options.Model && /^[\dabcdef]{24}$/i.test(`${id}`) && !params.skipExisting) {
+  const { service, id, params, path, method } = context;
+  if (
+    (path !== 'access' || method !== 'get') &&
+    service.options &&
+    service.options.Model &&
+    /^[\dabcdef]{24}$/i.test(`${id}`) &&
+    !params.skipExisting
+  ) {
     context.existing = await service.get(id, { skipExisting: true });
   }
   return context;
