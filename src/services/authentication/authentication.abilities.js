@@ -29,6 +29,7 @@ const defineRulesFor = async (user, app) => {
     can('manage', 'inductions');
     can('read', 'completions');
     can('read', 'users');
+    can('read', 'access');
     can('update', 'users', ['displayName', 'preferences']);
     return rules;
   }

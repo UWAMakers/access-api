@@ -1,6 +1,7 @@
 const axios = require('axios');
 const { LocalStrategy } = require('@feathersjs/authentication-local');
 const { NotAuthenticated } = require('@feathersjs/errors');
+const { encrypt } = require('../util/cryptMeTimbers');
 
 const fix = (name = '') => name.trim().replace(/\s+\(\d+\)$/, '');
 
@@ -11,7 +12,7 @@ if (process.env.NODE_ENV !== 'production') {
 class PhemeStrategy extends LocalStrategy {
   // eslint-disable-next-line no-unused-vars
   async authenticate(data, params) {
-    const { username, password } = data;
+    const { username, password, uuid } = data;
     const isDemoUser =
       process.env.NODE_ENV !== 'production' &&
       username === '12345678' &&
@@ -30,11 +31,13 @@ class PhemeStrategy extends LocalStrategy {
     } else {
       try {
         const res = await axios.post(
-          `${this.app.get('authEndpoint')}/api/login`,
+          `${this.app.get('authEndpoint')}/api/${uuid ? 'card' : 'login'}`,
           {
             user: username,
             pass: password,
+            uuid,
             token: process.env.AUTH_TOKEN,
+            userToken: true,
           }
         );
         body = res.data;
@@ -71,6 +74,9 @@ class PhemeStrategy extends LocalStrategy {
     } else {
       userObj.displayName = users[0].displayName || userObj.displayName;
       user = await this.app.service('users').patch(users[0]._id, userObj);
+    }
+    if (body.userToken && params.payload) {
+      params.payload.utok = encrypt(body.userToken, `${user._id}`, this.app.get('authentication').secret);
     }
     return {
       authentication: { strategy: this.name },

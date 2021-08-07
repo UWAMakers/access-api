@@ -1,6 +1,7 @@
 const stashExisting = async (context) => {
-  const { service, id, params } = context;
+  const { service, id, params, path, method } = context;
   if (
+    (path !== 'access' || method !== 'get') &&
     service.options &&
     service.options.Model &&
     /^[\dabcdef]{24}$/i.test(`${id}`) &&
