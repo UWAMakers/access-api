@@ -9,6 +9,8 @@ module.exports = function (app) {
   const schema = new Schema({
     subject: { type: String, required: true },
     body: { type: String, required: true },
+    buttonText: { type: String },
+    buttonLink: { type: String },
     to: { type: [String] },
     cc: { type: [String] },
     bcc: { type: [String] },
@@ -26,6 +28,7 @@ module.exports = function (app) {
     sendToUser: { type: Boolean, default: false },
     daysOfWeek: [{ type: Number, min: 0, max: 6 }],
     hoursOfDay: [{ type: Number, min: 0, max: 23 }],
+    enabled: { type: Boolean, default: true },
   }, {
     timestamps: true
   });

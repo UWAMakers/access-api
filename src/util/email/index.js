@@ -1,14 +1,23 @@
 const mjml2html = require('mjml');
+require('handlebars-helpers')();
+const handlebars = require('handlebars');
 
-exports.createActionEmailBody = (inductorName, trainingItemName) =>
+exports.createInductionEmailBody = (inductorName, trainingItemName) =>
   `${inductorName} has added you to the following induction item: ${trainingItemName}. Please click the button below to confirm your induction`;
 
-exports.getActionEmailHtml = (
+// take in a template and data object and return the html
+exports.renderEmailBody = (template, data) => {
+  const templateString = handlebars.compile(template);
+  return templateString(data);
+};
+
+exports.getActionEmailHtml = ({
   bodyText,
+  bodyHtml,
   firstName,
   actionButtonText,
   actionButtonLink
-) =>
+}) =>
   mjml2html(`
 <mjml>
   <mj-body>
@@ -23,9 +32,10 @@ exports.getActionEmailHtml = (
     </mj-raw>
     <mj-section background-color="#fafafa">
       <mj-column width="400px">
-        <mj-text font-style="italic" font-family="Helvetica Neue" color="#626262">Dear ${firstName}</mj-text>
-        <mj-text color="#525252">${bodyText}.</mj-text>
-        <mj-button background-color="#ff2709" href="${actionButtonLink}">${actionButtonText}</mj-button>
+        ${firstName ? `<mj-text font-style="italic" font-family="Helvetica Neue" color="#626262">Dear ${firstName}</mj-text>` : ''}
+        ${bodyText ? `<mj-text color="#525252">${bodyText}.</mj-text>` : ''}
+        ${bodyHtml ? `<mj-raw>${bodyHtml}</mj-raw>` : ''}
+        ${actionButtonLink  ? `<mj-button background-color="#ff2709" href="${actionButtonLink}">${actionButtonText || 'Click Me!'}</mj-button>` : ''}
       </mj-column>
     </mj-section>
     <mj-section background-color="#fafafa">
