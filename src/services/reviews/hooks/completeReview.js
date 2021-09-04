@@ -6,17 +6,16 @@ const addItemToCompletion = require('../../../util/addItemToCompletion');
 // eslint-disable-next-line no-unused-vars
 module.exports = (options = {}) => {
   return async (context) => {
-    checkContext(context, 'after', ['patch', 'update']);
+    checkContext(context, 'after', ['create', 'patch', 'update']);
 
     const { result, existing, id, params } = context;
     const { user } = params;
 
-    if (
-      !user ||
-      moment(result.confirmedAt).valueOf() ===
-        moment(existing.confirmedAt).valueOf()
-    )
+    if (!user
+      || moment(result.confirmedAt).valueOf() === moment(existing?.confirmedAt).valueOf()
+    ) {
       return context;
+    }
 
     await addItemToCompletion(context, {
       itemId: result.itemId,

@@ -31,7 +31,7 @@ module.exports = {
     ],
     find: [],
     get: [],
-    create: [],
+    create: [completeReview()],
     update: [completeReview()],
     patch: [completeReview()],
     remove: [],

@@ -10,8 +10,11 @@ module.exports = function (app) {
     templateId: { type: mongooseClient.Types.ObjectId },
     userIds: { type: [mongooseClient.Types.ObjectId] },
     status: { type: String },
-  }, {
-    timestamps: true
+    createdAt: { type: Date },
+    updatedAt: { type: Date },
+  },
+  {
+    timestamps: !process.env.DISABLE_TIMESTAMPS,
   });
 
   // This is necessary to avoid model compilation errors in watch mode

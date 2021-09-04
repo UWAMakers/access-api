@@ -12,9 +12,11 @@ module.exports = function (app) {
       userId: { type: mongooseClient.Types.ObjectId },
       url: { type: String },
       confirmedAt: { type: Date },
+      createdAt: { type: Date },
+      updatedAt: { type: Date },
     },
     {
-      timestamps: true,
+      timestamps: !process.env.DISABLE_TIMESTAMPS,
     }
   );
 

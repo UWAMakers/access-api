@@ -11,8 +11,11 @@ module.exports = function (app) {
     userId: { type: mongooseClient.Types.ObjectId },
     granted: { type: Boolean },
     test: { type: Boolean },
-  }, {
-    timestamps: true
+    createdAt: { type: Date },
+    updatedAt: { type: Date },
+  },
+  {
+    timestamps: !process.env.DISABLE_TIMESTAMPS,
   });
 
   // This is necessary to avoid model compilation errors in watch mode
