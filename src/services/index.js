@@ -10,6 +10,7 @@ const access = require('./access/access.service.js');
 const notificationTemplates = require('./notification-templates/notification-templates.service.js');
 const notifications = require('./notifications/notifications.service.js');
 const notificationSchedules = require('./notification-schedules/notification-schedules.service.js');
+const homeLinks = require('./home-links/home-links.service.js');
 // eslint-disable-next-line no-unused-vars
 module.exports = function (app) {
   app.configure(users);
@@ -24,4 +25,5 @@ module.exports = function (app) {
   app.configure(notificationTemplates);
   app.configure(notifications);
   app.configure(notificationSchedules);
+  app.configure(homeLinks);
 };
