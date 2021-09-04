@@ -10,8 +10,11 @@ module.exports = function (app) {
     name: { type: String, required: true, trim: true },
     icon: { type: String, required: true, trim: true },
     href: { type: String, required: true, trim: true },
-  }, {
-    timestamps: true
+    createdAt: { type: Date },
+    updatedAt: { type: Date },
+  },
+  {
+    timestamps: !process.env.DISABLE_TIMESTAMPS,
   });
 
   // This is necessary to avoid model compilation errors in watch mode
