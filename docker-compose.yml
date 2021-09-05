@@ -1,0 +1,9 @@
+version: "2.2" # optional since v1.27.0
+services:
+  access:
+    restart: always
+    container_name: access3
+    image: access3:latest
+    ports:
+      - "5000:3011"
+
