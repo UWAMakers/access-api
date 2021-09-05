@@ -4,7 +4,7 @@ To start the docker container:
 
 ```[bash]
 docker build -t access3:latest .
-docker run -p <your port>:3030 --env-file=.env access3
+docker-compose up -d
 ```
 
 ## About
