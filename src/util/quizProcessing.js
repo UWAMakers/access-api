@@ -17,8 +17,14 @@ const getScore = (item) => {
 
 const getUsername = (item) => {
   const key = Object.keys(item).find((i) => /pheme/i.test(i));
-  if (!key || !/^\d{1,9}$/) return undefined;
+  if (!key || !/^\d{1,9}$/.test(item[key])) return undefined;
   return item[key].padStart(8, '0');
+};
+
+const getEmail = (item) => {
+  const key = Object.keys(item).find((i) => /email address/i.test(i));
+  if (!key || !/^.+@.+\..+$/.test(item[key])) return undefined;
+  return item[key].trim().toLowerCase();
 };
 
 const getTimestamp = (item) => {
@@ -37,6 +43,7 @@ const loadScores = async ({ csvUrl, expiry }) => {
   const results = rawResults
     .map((item) => ({
       username: getUsername(item),
+      email: getEmail(item),
       timestamp: getTimestamp(item),
       score: getScore(item),
     }))
@@ -46,16 +53,24 @@ const loadScores = async ({ csvUrl, expiry }) => {
     );
   return _.uniqBy(
     _.sortBy(results, [(v) => v.score * -1, (v) => -1 * v.timestamp.valueOf()]),
-    'username'
+    (r) => r.username || r.email
   );
 };
 
 const processQuizItem = async (app, item) => {
   const allResults = await loadScores(item);
+  const usernames = _.uniq(allResults.map((v) => v.username)).filter(Boolean);
+  const emails = _.uniq(allResults.map((v) => v.email)).filter(Boolean);
   const users = await app.service('users').find({
     query: {
-      username: { $in: _.uniq(allResults.map((r) => r.username)) },
-      $select: { _id: 1, username: 1 },
+      $or: [
+        ...(usernames.length ? [{ username: { $in: usernames } }] : []),
+        ...(emails.length ? [
+          { email: { $in: emails } },
+          { 'preferences.email': { $in: emails } },
+        ] : []),
+      ],
+      $select: { _id: 1, username: 1, email: 1, 'preferences.email': 1 },
     },
     paginate: false,
   });
@@ -77,55 +92,52 @@ const processQuizItem = async (app, item) => {
     await a;
     await Promise.all(
       userChunk.map(async (user) => {
-        const result = allResults.find((r) => r.username === user.username);
+        const result = allResults.find((r) => r.username === user.username || (r.email && (
+          r.email === user?.email
+          || r.email === user?.preferences?.email)));
         if (!result) return;
-        await Promise.all(
-          trainings.map(async (training) => {
-            const completion = allCompletions.find(
-              (c) =>
-                `${c.userId}` === `${user._id}` &&
-                `${c.trainingId}` === `${training._id}`
+        await Promise.all(trainings.map(async (training) => {
+          const completion = allCompletions.find(
+            (c) => `${c.userId}` === `${user._id}` && `${c.trainingId}` === `${training._id}`,
+          );
+          const compItem = {
+            itemId: item._id,
+            score: result.score,
+            confirmedAt: result.timestamp,
+          };
+          if (completion) {
+            const existingItem = completion.items.find(
+              (i) => `${i.itemId}` === `${compItem.itemId}`
             );
-            const compItem = {
-              itemId: item._id,
-              score: result.score,
-              confirmedAt: result.timestamp,
-            };
-            if (completion) {
-              const existingItem = completion.items.find(
-                (i) => `${i.itemId}` === `${compItem.itemId}`
-              );
-              if (
-                existingItem &&
-                moment(existingItem.confirmedAt).valueOf() ===
-                  result.timestamp.valueOf()
-              )
-                return;
-              await app.service('completions').patch(
-                completion._id,
-                {
-                  ...completion,
-                  items: [
-                    ..._.get(completion, 'items', []).filter(
-                      (i) => `${i.itemId}` !== `${compItem.itemId}`
-                    ),
-                    compItem,
-                  ],
-                },
-                { training }
-              );
-            } else {
-              await app.service('completions').create(
-                {
-                  trainingId: training._id,
-                  userId: user._id,
-                  status: 'pending',
-                  items: [compItem],
-                },
-                { training }
-              );
+            if (existingItem
+              && moment(existingItem.confirmedAt).valueOf() === result.timestamp.valueOf()
+            ) {
+              return;
             }
-          })
+            await app.service('completions').patch(completion._id,
+              {
+                ...completion,
+                items: [
+                  ..._.get(completion, 'items', []).filter(
+                    (i) => `${i.itemId}` !== `${compItem.itemId}`
+                  ),
+                  compItem,
+                ],
+              },
+              { training },
+            );
+          } else {
+            await app.service('completions').create(
+              {
+                trainingId: training._id,
+                userId: user._id,
+                status: 'pending',
+                items: [compItem],
+              },
+              { training }
+            );
+          }
+        })
         );
       })
     );

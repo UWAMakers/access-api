@@ -32,8 +32,11 @@ module.exports = function (app) {
     daysOfWeek: [{ type: Number, min: 0, max: 6 }],
     hoursOfDay: [{ type: Number, min: 0, max: 23 }],
     enabled: { type: Boolean, default: true },
-  }, {
-    timestamps: true
+    createdAt: { type: Date },
+    updatedAt: { type: Date },
+  },
+  {
+    timestamps: !process.env.DISABLE_TIMESTAMPS,
   });
 
   // This is necessary to avoid model compilation errors in watch mode

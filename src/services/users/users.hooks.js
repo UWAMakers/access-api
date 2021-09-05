@@ -39,13 +39,13 @@ module.exports = {
     find: [],
     get: [],
     create: [
-      ifChangedTo({ 'preferences.joinedAt': Boolean }, [
+      ifChangedTo({ 'preferences.joinedAt': (v) => !!v }, [
         notify('user_joined', '_id'),
       ]),
     ],
     update: [],
     patch: [
-      ifChangedTo({ 'preferences.joinedAt': Boolean }, [
+      ifChangedTo({ 'preferences.joinedAt': (v) => !!v }, [
         notify('user_joined', '_id'),
       ]),
     ],

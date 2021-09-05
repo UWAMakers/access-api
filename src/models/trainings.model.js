@@ -9,8 +9,11 @@ module.exports = function (app) {
     order: { type: Number, default: 9999999 },
     itemIds: { type: [mongooseClient.Types.ObjectId] },
     parentIds: { type: [mongooseClient.Types.ObjectId] },
-  }, {
-    timestamps: true
+    createdAt: { type: Date },
+    updatedAt: { type: Date },
+  },
+  {
+    timestamps: !process.env.DISABLE_TIMESTAMPS,
   });
 
   // This is necessary to avoid model compilation errors in watch mode
