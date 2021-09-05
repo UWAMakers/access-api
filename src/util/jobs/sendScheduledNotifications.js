@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const sendTemplate = require('../email/template');
+const {sendTemplate} = require('../email/template');
 
 let lastNotificationSync;
 
