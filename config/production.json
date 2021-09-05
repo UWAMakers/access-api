@@ -1,5 +1,5 @@
 {
-  "host": "access-api-app.feathersjs.com",
+  "host": "access.uwamakers.com",
   "port": "PORT",
   "CATCH_NOTIFICATIONS": false,
   "CLIENT_DOMAIN": "https://access.uwamakers.com"
