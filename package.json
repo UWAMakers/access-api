@@ -1,7 +1,7 @@
 {
   "name": "access-api",
-  "description": "",
-  "version": "0.0.0",
+  "description": "Makers Access API v3",
+  "version": "3.0.0",
   "homepage": "",
   "private": true,
   "main": "src",
@@ -29,7 +29,7 @@
     "dev": "nodemon src/",
     "start": "node src/",
     "mocha": "mocha test/ --recursive --exit",
-    "docker": "docker build -t access3:latest ."
+    "docker": "docker build -t uwashl/access:latest ."
   },
   "standard": {
     "env": [
@@ -75,6 +75,7 @@
   "devDependencies": {
     "@feathersjs/cli": "^4.5.0",
     "eslint": "^7.17.0",
+    "git-describe": "^4.1.0",
     "mocha": "^8.2.1",
     "nodemon": "^2.0.7"
   }

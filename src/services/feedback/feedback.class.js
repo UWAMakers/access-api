@@ -17,11 +17,12 @@ exports.Feedback = class Feedback {
   }
 
   async create(data, params) {
-    const { msg } = data;
-    const firstName = params.user.firstName || 'Anonymous';
-    const lastName = params.user.lastName || 'Turtle';
+    const { msg, versions } = data;
+    const firstName = params.user?.firstName || 'Anonymous';
+    const lastName = params.user?.lastName || 'Turtle';
     const fullName = `${firstName} ${lastName}`;
-    const msgJson = messages.createMessage(fullName, msg);
+    const msgJson = messages.createMessage(fullName, msg, versions);
+    // console.log(JSON.stringify(msgJson, null, 2));
     this.app.service('notifications').create({
       slack: {
         msgJson,

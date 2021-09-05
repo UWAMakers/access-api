@@ -4,6 +4,8 @@ const compress = require('compression');
 const helmet = require('helmet');
 const cors = require('cors');
 const logger = require('./logger');
+const { gitDescribeSync } = require('git-describe');
+const { version } = require('../package.json');
 
 const feathers = require('@feathersjs/feathers');
 const configuration = require('@feathersjs/configuration');
@@ -57,6 +59,14 @@ app.configure(channels);
 app.configure(casl());
 app.configure(scheduleJobs);
 app.configure(syncWithOldData);
+
+const gitHash = gitDescribeSync().hash;
+app.get('/version', (req, res) => {
+  res.json({
+    version,
+    gitHash,
+  });
+});
 
 // Configure a middleware for 404s and the error handler
 app.use((req, res) => {

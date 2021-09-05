@@ -1,10 +1,13 @@
-const createMessage = (sender, msg) => ({
+const createMessage = (sender, msg, versions) => ({
   blocks: [
     {
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: `New bug report from *${sender}*`,
+        text: `
+New bug report from *${sender}*
+${versions ? `\`APP-${versions.frontend} --- API-${versions.backend}\`` : ''}
+        `.trim(),
       },
     },
     {
