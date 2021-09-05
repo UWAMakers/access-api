@@ -23,6 +23,7 @@ const defineRulesFor = async (user, app) => {
   }
 
   if (user.roles.includes('admin')) {
+    can('manage', 'home-links');
     can('manage', 'trainings');
     can('manage', 'training-items');
     can('manage', 'notification-templates');
@@ -40,6 +41,7 @@ const defineRulesFor = async (user, app) => {
     paginate: false,
   });
 
+  can('read', 'home-links');
   can('read', 'trainings');
   can('read', 'training-items');
   can('read', 'completions', userId('userId'));
