@@ -2,9 +2,9 @@ version: "2.2" # optional since v1.27.0
 services:
   access:
     restart: always
-    container_name: access3
+    container_name: access
     env_file:
-    - .env
+      - .env
     image: uwashl/access:latest
     ports:
       - "5000:3030"
@@ -13,5 +13,5 @@ services:
     image: containrrr/watchtower
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    command: access3 --interval 60
+    command: access --interval 60 --cleanup
 
