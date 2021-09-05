@@ -1,6 +1,11 @@
 # access-api
 
->
+To start the docker container:
+
+```[bash]
+docker build -t access3:latest .
+docker run -p <your port>:3030 --env-file=.env access3
+```
 
 ## About
 
@@ -43,3 +48,5 @@ $ feathers help                           # Show all commands
 ## Help
 
 For more information on all the things you can do with Feathers visit [docs.feathersjs.com](http://docs.feathersjs.com).
+
+
