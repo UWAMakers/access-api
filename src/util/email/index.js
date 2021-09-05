@@ -15,7 +15,6 @@ exports.renderEmailBody = (template, data) => {
 exports.getActionEmailHtml = ({
   bodyText,
   bodyHtml,
-  firstName,
   actionButtonText,
   actionButtonLink
 }) =>
@@ -33,8 +32,6 @@ exports.getActionEmailHtml = ({
     </mj-raw>
     <mj-section background-color="#fafafa">
       <mj-column width="400px">
-      
-        ${firstName ? `<mj-text font-style="italic" color="#626262">Dear ${firstName}</mj-text>` : ''}
         ${bodyText ? `<mj-text color="#525252">${bodyText}.</mj-text>` : ''}
         <mj-text>
         ${bodyHtml ? `<mj-raw>${bodyHtml}</mj-raw>` : ''}

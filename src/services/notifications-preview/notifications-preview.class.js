@@ -16,16 +16,20 @@ exports.NotificationsPreview = class NotificationsPreview  {
   }
 
   async create(data, params) { 
-    const {body, ctaText = '', ctaLink = ''} = data;
+    const {body, buttonLink = '', buttonText = ''} = data;
     const markdownHtml = compileMarkdown(body);
     const template = {
       body: markdownHtml,
-      buttonLink: ctaLink,
-      buttonText: ctaText,
+      buttonLink,
+      buttonText,
       subject: 'Your cool induction'
     };
     const recipient = {
-      'firstName': 'Jo'
+      firstName: 'Jo',
+      lastName: 'Bloggs',
+      email: '12345678@student.uwa.edu.au',
+      username: '12345678',
+      displayName: 'J-dawg',
     };
     const training = {};
     const users = [

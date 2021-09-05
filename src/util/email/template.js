@@ -16,8 +16,8 @@ const getRenderContext = (template, recipient, training, users, usersContext = {
     userTable: `<table><thead><tr><th>Name</th><th>Pheme Number</th>${
       hasStatus ? '<th>Status</th>' : ''
     }</tr></thead><tbody>${
-      users.map(user => `<tr><th>${user.name}</th><th>${user.username}</th>${
-        hasStatus ? `<th>${usersContext[`${user._id}`]?.status || ''}</th>` : ''
+      users.map(user => `<tr><td>${user.name}</td><td>${user.username}</td>${
+        hasStatus ? `<td>${usersContext[`${user._id}`]?.status || ''}</td>` : ''
       }</tr>`).join('')
     }</tbody></table>`,
   };
