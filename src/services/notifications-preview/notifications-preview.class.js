@@ -29,17 +29,18 @@ exports.NotificationsPreview = class NotificationsPreview  {
       lastName: 'Bloggs',
       email: '12345678@student.uwa.edu.au',
       username: '12345678',
-      displayName: 'J-dawg',
     };
     const training = {};
     const users = [
       {
-        name: 'Austin Powers',
+        firstName: 'Austin',
+        lastName: 'Powers',
         username: '12345678',
         _id: 'b288fb37-6f67-4797-8301-c8270ca9ad9e',
       },
       {
-        name: 'Nathan Lyon',
+        firstName: 'Nathan',
+        lastName: 'Lyon',
         username: '87654321',
         _id: 'b288fb37-6f67-4797-8301-c8270ca9ad9f',
       },

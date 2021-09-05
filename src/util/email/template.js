@@ -4,20 +4,35 @@ const {
   renderEmailBody,
 } = require('./index');
 
+const marked = require('marked');
+
+const compileMarkdown = (text) => {
+  return marked(text);
+};
+
+const fix = (name = '') => name.trim().replace(/\s+\(\d+\)$/, '');
+const generateFullName = (user) =>  (`${fix(user.firstName)} ${user.lastName}`);
+
+const addUsernames = (users) => (users.map((user) => ({...user, name: generateFullName(user)})));
+
+
 const getRenderContext = (template, recipient, training, users, usersContext = {}) => {
   const hasStatus = Object.values(usersContext).some(({ status }) => !!status);
+  const usersWithNames = addUsernames(users);
+  const padding = 'style="padding: 4px"';
+
   return {
     template,
     recipient,
     training,
     users,
-    userNames: _.map(users, 'name').join(', '),
+    userNames: _.map(usersWithNames, 'name').join(', '),
     userPhemes: _.map(users, 'username').join(', '),
-    userTable: `<table><thead><tr><th>Name</th><th>Pheme Number</th>${
-      hasStatus ? '<th>Status</th>' : ''
+    userTable: `<table><thead><tr><th ${padding}>Name</th><th ${padding}>Pheme Number</th>${
+      hasStatus ? `<th ${padding}>Status</th>` : ''
     }</tr></thead><tbody>${
-      users.map(user => `<tr><td>${user.name}</td><td>${user.username}</td>${
-        hasStatus ? `<td>${usersContext[`${user._id}`]?.status || ''}</td>` : ''
+      usersWithNames.map(user => `<tr><td ${padding}>${user.name}</td><td ${padding}>${user.username}</td>${
+        hasStatus ? `<td ${padding}>${usersContext[`${user._id}`]?.status || ''}</td>` : ''
       }</tr>`).join('')
     }</tbody></table>`,
   };
@@ -25,7 +40,8 @@ const getRenderContext = (template, recipient, training, users, usersContext = {
 
 const compileTemplate = (renderContext) => {
   const {recipient, template} = renderContext;
-  const messageBody = renderEmailBody(template.body, renderContext);
+  const compiledMarkdown = compileMarkdown(template.body);
+  const messageBody = renderEmailBody(compiledMarkdown, renderContext);
   return getActionEmailHtml({
     bodyHtml: messageBody,
     firstName: recipient.firstName,
