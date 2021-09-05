@@ -32,7 +32,7 @@ module.exports = (options = {}) => {
 
     if (!induction)
       throw new errors.NotFound(
-        "Induction doesn't exist, or your link has expired"
+        'Induction doesn\'t exist, or your link has expired'
       );
 
     const trainingId = await addItemToCompletion(context, {

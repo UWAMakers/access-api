@@ -30,7 +30,6 @@ module.exports = (options = {}) => {
     const mailListId = context.app.settings.mailchimpListId;
     const mailchimpServerPrefix = context.app.settings.mailchimpServerPrefix;
 
-    console.log(mailchimpApiKey);
     if (
       !mailchimpApiKey
       || mailchimpApiKey === 'MAILCHIMP_API_KEY'

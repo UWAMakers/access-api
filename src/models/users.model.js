@@ -16,10 +16,13 @@ module.exports = function (app) {
       preferences: {
         joinedAt: { type: Date },
         dark: { type: Boolean },
+        email: { type: String, lowercase: true },
       },
+      createdAt: { type: Date },
+      updatedAt: { type: Date },
     },
     {
-      timestamps: true,
+      timestamps: !process.env.DISABLE_TIMESTAMPS,
     }
   );
 

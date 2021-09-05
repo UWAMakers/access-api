@@ -25,6 +25,9 @@ module.exports = {
         const ability = await defineAbilitiesFor(user, context.app);
         context.result.ability = ability;
         context.result.rules = ability.rules;
+        if (context.params?.connection) {
+          context.params.connection.ability = ability;
+        }
 
         return context;
       },

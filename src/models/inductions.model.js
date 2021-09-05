@@ -18,9 +18,11 @@ module.exports = function (app) {
           expiresAt: { type: Date },
         },
       ],
+      createdAt: { type: Date },
+      updatedAt: { type: Date },
     },
     {
-      timestamps: true,
+      timestamps: !process.env.DISABLE_TIMESTAMPS,
     }
   );
 

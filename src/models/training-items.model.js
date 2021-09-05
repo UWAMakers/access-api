@@ -15,17 +15,20 @@ module.exports = function (app) {
         required: true,
         enum: ['comment', 'quiz', 'completion', 'induction', 'review'],
       },
-      url: { type: String },
-      checklistUrl: { type: String },
-      csvUrl: { type: String },
-      trainingId: { type: mongooseClient.Types.ObjectId },
-      inductorIds: { type: [mongooseClient.Types.ObjectId] },
-      required: { type: Boolean, default: true },
-      requiredScore: { type: Number },
-      expiry: { type: Number }, // weeks
+      url: { type: String }, // all but completion
+      checklistUrl: { type: String }, // induction only
+      csvUrl: { type: String }, // quiz only
+      trainingId: { type: mongooseClient.Types.ObjectId }, // completion only
+      inductorIds: { type: [mongooseClient.Types.ObjectId] }, // induction only
+      required: { type: Boolean, default: true }, // all but comment
+      requiredScore: { type: Number }, // quiz only
+      expiry: { type: Number }, // weeks (all but comment)
+      ref: { type: String }, // for syncing inductions, to delete later
+      createdAt: { type: Date },
+      updatedAt: { type: Date },
     },
     {
-      timestamps: true,
+      timestamps: !process.env.DISABLE_TIMESTAMPS,
     }
   );
 

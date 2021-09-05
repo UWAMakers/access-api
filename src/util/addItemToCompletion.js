@@ -32,6 +32,10 @@ module.exports = async (context, compItem) => {
             userId: user._id,
             status: 'pending',
             items: [compItem],
+            ...(process.env.DISABLE_TIMESTAMPS ? {
+              createdAt: compItem.confirmedAt || new Date(),
+              updatedAt: compItem.confirmedAt || new Date(),
+            } : {}),
           },
           { training }
         );
@@ -46,6 +50,9 @@ module.exports = async (context, compItem) => {
               ),
               compItem,
             ],
+            ...(process.env.DISABLE_TIMESTAMPS ? {
+              updatedAt: compItem.confirmedAt || new Date(),
+            } : {}),
           },
           { training }
         );

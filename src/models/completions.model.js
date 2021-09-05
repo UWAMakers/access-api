@@ -21,9 +21,11 @@ module.exports = function (app) {
           status: { type: String, enum: ['pending', 'complete'] },
         },
       ],
+      createdAt: { type: Date },
+      updatedAt: { type: Date },
     },
     {
-      timestamps: true,
+      timestamps: !process.env.DISABLE_TIMESTAMPS,
     }
   );
 
