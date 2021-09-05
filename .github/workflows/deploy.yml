@@ -22,5 +22,5 @@ jobs:
       - name: Build, tag, and push image
         id: build-image
         run: |
-          docker build -t uwashl/access:latest
+          docker build -t uwashl/access:latest .
           docker push uwashl/access:latest
