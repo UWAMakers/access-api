@@ -5,7 +5,14 @@ services:
     container_name: access3
     env_file:
     - .env
-    image: access3:latest
+    image: uwashl/access:latest
     ports:
       - "5000:3030"
+  watchtower:
+    restart: always
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/.docker/config.json:/config.json
+    command: access3 --interval 60
 
