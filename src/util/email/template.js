@@ -84,7 +84,7 @@ const sendTemplate = async (app, templateId, userIds, usersContext = {}, cache =
     return app.service('notifications').create({
       email: {
         html: emailHtml,
-        to: recipient.email,
+        to: recipient.preferences?.email || recipient.email,
         cc: template.cc,
         bcc: template.bcc,
         from: app.get('EMAIL_FROM') || app.get('SMTP_USER'),
