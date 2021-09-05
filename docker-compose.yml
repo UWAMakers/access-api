@@ -3,7 +3,9 @@ services:
   access:
     restart: always
     container_name: access3
+    env_file:
+    - .env
     image: access3:latest
     ports:
-      - "5000:3011"
+      - "5000:3030"
 
