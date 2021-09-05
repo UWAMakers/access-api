@@ -1,4 +1,5 @@
 const mjml2html = require('mjml');
+
 require('handlebars-helpers')();
 const handlebars = require('handlebars');
 
@@ -14,7 +15,6 @@ exports.renderEmailBody = (template, data) => {
 exports.getActionEmailHtml = ({
   bodyText,
   bodyHtml,
-  firstName,
   actionButtonText,
   actionButtonLink
 }) =>
@@ -32,9 +32,10 @@ exports.getActionEmailHtml = ({
     </mj-raw>
     <mj-section background-color="#fafafa">
       <mj-column width="400px">
-        ${firstName ? `<mj-text font-style="italic" font-family="Helvetica Neue" color="#626262">Dear ${firstName}</mj-text>` : ''}
         ${bodyText ? `<mj-text color="#525252">${bodyText}.</mj-text>` : ''}
+        <mj-text>
         ${bodyHtml ? `<mj-raw>${bodyHtml}</mj-raw>` : ''}
+        </mj-text>
         ${actionButtonLink  ? `<mj-button background-color="#ff2709" href="${actionButtonLink}">${actionButtonText || 'Click Me!'}</mj-button>` : ''}
       </mj-column>
     </mj-section>

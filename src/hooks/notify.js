@@ -1,7 +1,7 @@
 const { checkContext } = require('feathers-hooks-common');
 // const errors = require('@feathersjs/errors');
 const _ = require('lodash');
-const sendTemplate = require('../util/email/sendTemplate');
+const {sendTemplate} = require('../util/email/template');
 
 // eslint-disable-next-line no-unused-vars
 module.exports = (templateAction, userIdsField, options = {}) => {

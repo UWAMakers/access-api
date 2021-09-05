@@ -8,6 +8,8 @@ module.exports = function (app) {
   const { Schema } = mongooseClient;
   const schema = new Schema({
     subject: { type: String, required: true },
+    name: {type: String, required: true},
+    description: {type: String},
     body: { type: String, required: true },
     buttonText: { type: String },
     buttonLink: { type: String },
@@ -22,6 +24,7 @@ module.exports = function (app) {
         'training_complete',
         'training_expired',
         'training_change_bulk',
+        'template_example'
       ],
     },
     trainingId: { type: mongooseClient.Types.ObjectId },
