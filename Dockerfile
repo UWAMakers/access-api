@@ -1,7 +1,12 @@
-FROM node:14
+FROM node:14-alpine
 WORKDIR /usr/src/app
 
 ENV VUE_APP_API_URL=/
+
+
+RUN apk --update add git less openssh && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm /var/cache/apk/*
 
 RUN git clone https://github.com/UWAMakers/access-frontend.git
 RUN cd access-frontend && yarn && yarn build
