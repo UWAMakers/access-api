@@ -33,6 +33,8 @@ const defineRulesFor = async (user, app) => {
     can('read', 'access');
     can('read', 'reviews');
     can('update', 'users', ['displayName', 'preferences']);
+    can('create', 'reviews', ['itemId', 'userId', 'url'], userId('userId'));
+    can('update', 'reviews', userId('userId'));
     return rules;
   }
 
