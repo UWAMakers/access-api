@@ -28,10 +28,10 @@ const defineRulesFor = async (user, app) => {
     can('manage', 'training-items');
     can('manage', 'notification-templates');
     can('manage', 'inductions');
+    can('manage', 'reviews');
     can('read', 'completions');
     can('read', 'users');
     can('read', 'access');
-    can('read', 'reviews');
     can('update', 'users', ['displayName', 'preferences']);
     return rules;
   }
