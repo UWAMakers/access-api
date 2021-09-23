@@ -77,7 +77,7 @@ const sendTemplate = async (app, templateId, userIds, usersContext = {}, cache =
   const recipients = template.sendToUser ? users : template.to.map(email => ({ email }));
   
   
-  await Promise.all(recipients.map(async recipient => {
+  Promise.all(recipients.map(async recipient => {
     const renderContext = getRenderContext(template, recipient, training, users, usersContext);
     const subject = renderEmailBody(template.subject, {...renderContext, userTable: '' });
     const emailHtml = compileTemplate(renderContext);

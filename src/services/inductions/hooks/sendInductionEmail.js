@@ -37,7 +37,7 @@ module.exports = (options = {}) => {
       paginate: false,
     });
     let sentKeys = [];
-    await Promise.all(
+    Promise.all(
       keys.map(async ({ key, userIds, emailSent, _id }) => {
         if (emailSent || !userIds.length) return;
         const inductionUrl = `${app.get('CLIENT_DOMAIN')}/induction/${key}`;
