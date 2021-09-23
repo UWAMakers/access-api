@@ -87,7 +87,7 @@ const sendTemplate = async (app, templateId, userIds, usersContext = {}, cache =
         to: recipient.preferences?.email || recipient.email,
         cc: template.cc,
         bcc: template.bcc,
-        from: app.get('EMAIL_FROM') || app.get('SMTP_USER'),
+        from: app.get('SMTP_USER'),
         subject,
       },
     });

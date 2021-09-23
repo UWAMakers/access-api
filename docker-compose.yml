@@ -10,6 +10,8 @@ services:
       - "5000:3030"
   watchtower:
     restart: always
+    env_file:
+      - .env
     image: containrrr/watchtower
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
