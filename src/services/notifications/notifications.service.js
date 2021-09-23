@@ -11,9 +11,6 @@ module.exports = function (app) {
       email: {
         providers: [
           {
-            type: 'logger',
-          },
-          {
             type: 'smtp',
             port: 465,
             secure: true,

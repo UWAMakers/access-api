@@ -34,6 +34,7 @@ app.use(
     contentSecurityPolicy: false,
   })
 );
+
 app.use(cors());
 app.use(compress());
 app.use(express.json());
