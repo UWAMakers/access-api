@@ -56,7 +56,7 @@ module.exports = (options = {}) => {
               email: {
                 html: emailBody,
                 to: user.email,
-                from: app.get('EMAIL_FROM') || app.get('SMTP_USER'),
+                from: app.get('SMTP_USER'),
                 subject: 'Manual email induction verification',
               },
             });
