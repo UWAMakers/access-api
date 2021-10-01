@@ -12,9 +12,9 @@ module.exports = {
     ],
     get: [
       complete(),
-      iff((ctx) => !ctx.result, [
-        authorize(), // make sure this hook runs always last
-      ]),
+      // iff((ctx) => !ctx.result, [
+      //  authorize(), // make sure this hook runs always last
+      // ]),
     ],
     create: [
       authorize(), // make sure this hook runs always last
