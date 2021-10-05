@@ -32,7 +32,7 @@ module.exports = (templateAction, userIdsField, options = {}) => {
 
     await templates.reduce(async (promise, template) => {
       await promise;
-      if (!template.daysofWeek?.length || !template.hoursOfDay?.length) {
+      if (!template.daysOfWeek?.length || !template.hoursOfDay?.length) {
         await sendTemplate(app, template._id, userIds, usersContext, sendCache);
       } else {
         await app.service('notification-schedules').create({
