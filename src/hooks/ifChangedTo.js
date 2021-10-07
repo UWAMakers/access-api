@@ -8,7 +8,7 @@ module.exports = (changeDef, ifTrue = [], ifFalse = []) => {
     const { result, data, existing } = context;
     const record = result || data;
     return Object.keys(changeDef).some(key => {
-      const value = record[key];
+      const value = changeDef[key];
       if (value === '*') {
         return _.get(existing, key) !== _.get(record, key);
       }
