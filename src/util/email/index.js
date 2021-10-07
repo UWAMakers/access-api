@@ -4,7 +4,7 @@ require('handlebars-helpers')();
 const handlebars = require('handlebars');
 
 exports.createInductionEmailBody = (inductorName, trainingItemName) =>
-  `${inductorName} has added you to the following induction item: ${trainingItemName}. Please click the button below to confirm your induction`;
+  `${inductorName} has added you to the following induction item: ${trainingItemName}. Please click the button below to confirm your induction within 48 hours.`;
 
 // take in a template and data object and return the html
 exports.renderEmailBody = (template, data) => {
