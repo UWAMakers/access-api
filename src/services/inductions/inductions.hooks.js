@@ -12,9 +12,9 @@ module.exports = {
     ],
     get: [
       complete(),
-      // iff((ctx) => !ctx.result, [
-      //  authorize(), // make sure this hook runs always last
-      // ]),
+      iff((ctx) => !ctx?.params?.isUserCompleting, [
+        authorize(), // make sure this hook runs always last
+      ]),
     ],
     create: [
       authorize(), // make sure this hook runs always last
@@ -32,7 +32,9 @@ module.exports = {
 
   after: {
     all: [
-      authorize(), // make sure this hook runs always first
+      iff((ctx) => !ctx?.params?.isUserCompleting, [
+        authorize(), // make sure this hook runs always first
+      ]),
     ],
     find: [],
     get: [],

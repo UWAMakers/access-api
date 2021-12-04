@@ -29,7 +29,8 @@
     "dev": "nodemon src/",
     "start": "node src/",
     "mocha": "mocha test/ --recursive --exit",
-    "docker": "docker build -t uwashl/access:latest ."
+    "docker": "docker build -t uwashl/access:latest .",
+    "catcher": "notification-catcher"
   },
   "standard": {
     "env": [
@@ -66,7 +67,6 @@
     "moment-timezone": "^0.5.33",
     "mongodb-core": "^3.2.7",
     "mongoose": "^5.11.9",
-    "notification-catcher": "^1.2.1",
     "papaparse": "^5.3.0",
     "passport-custom": "^1.1.1",
     "serve-favicon": "^2.5.0",
@@ -77,6 +77,7 @@
     "eslint": "^7.17.0",
     "git-describe": "^4.1.0",
     "mocha": "^8.2.1",
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "notification-catcher": "^1.2.1"
   }
 }

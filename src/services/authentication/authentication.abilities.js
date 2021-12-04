@@ -47,7 +47,6 @@ const defineRulesFor = async (user, app) => {
   can('read', 'training-items');
   can('read', 'completions', userId('userId'));
   can('read', 'reviews', userId('userId'));
-  can('read', 'users', userId());
   can('update', 'users', ['displayName', 'preferences'], userId());
   cannot('delete', 'users', userId());
   can('create', 'reviews', ['itemId', 'userId', 'url'], userId('userId'));
@@ -59,6 +58,8 @@ const defineRulesFor = async (user, app) => {
     can('create', 'inductions', { ...userId('inductorId'), itemId });
     can('update', 'inductions', { ...userId('inductorId'), itemId });
     can('read', 'users');
+  } else {
+    can('read', 'users', userId());
   }
 
   return rules;
