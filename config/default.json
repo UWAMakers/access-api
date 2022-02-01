@@ -12,7 +12,8 @@
     "secret": "AUTH_SECRET",
     "authStrategies": [
       "jwt",
-      "local"
+      "local",
+      "label-printer"
     ],
     "jwtOptions": {
       "header": {
@@ -25,6 +26,11 @@
     },
     "local": {
       "usernameField": "email",
+      "passwordField": "password"
+    },
+    "label-printer": {
+      "service": "label-printers",
+      "usernameField": "_id",
       "passwordField": "password"
     }
   },

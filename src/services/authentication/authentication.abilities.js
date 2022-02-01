@@ -16,6 +16,13 @@ const defineRulesFor = async (user, app) => {
   // also see https://casl.js.org/v5/en/guide/define-rules
   const { can, cannot, rules } = new AbilityBuilder();
 
+  if (user.isLabelPrinter) {
+    can('manage', 'labels', { printerId: user._id });
+    can('read', 'label-printers', { _id: user._id });
+    can('update', 'label-printers', ['lastHeartbeat'], { _id: user._id });
+    return rules;
+  }
+
   if (user.roles.includes('super_admin')) {
     // super_admin can do evil
     can('manage', 'all');

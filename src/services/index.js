@@ -12,6 +12,8 @@ const notifications = require('./notifications/notifications.service.js');
 const notificationSchedules = require('./notification-schedules/notification-schedules.service.js');
 const notificationsPreview = require('./notifications-preview/notifications-preview.service.js');
 const homeLinks = require('./home-links/home-links.service.js');
+const labelPrinters = require('./label-printers/label-printers.service.js');
+const labels = require('./labels/labels.service.js');
 // eslint-disable-next-line no-unused-vars
 module.exports = function (app) {
   app.configure(users);
@@ -28,4 +30,6 @@ module.exports = function (app) {
   app.configure(notificationSchedules);
   app.configure(notificationsPreview);
   app.configure(homeLinks);
+  app.configure(labelPrinters);
+  app.configure(labels);
 };
