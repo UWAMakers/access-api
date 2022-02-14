@@ -29,9 +29,13 @@ const download = async (id, filepath) => {
 const printLabel = async (data) => {
   const filepath = genPath();
   await download(data._id, filepath);
-  const { stdout, stderr } = await exec(`brother_ql -m ${printer.model} -p file:///dev/usb/lp0 print -l ${printer.labelSize}  ${filepath}`);
-  if (stdout) console.log(stdout);
-  if (stderr) console.error(stderr);
+  await (new Array(data.copies || 1)).fill(null).reduce(async (promise) => {
+    await promise;
+    // eslint-disable-next-line no-unused-vars
+    const { stdout, stderr } = await exec(`brother_ql -m ${printer.model} -p file:///dev/usb/lp0 print -l ${printer.labelSize}  ${filepath}`);
+    // if (stdout) console.log(stdout);
+    // if (stderr) console.error(stderr);
+  }, Promise.resolve());
   await fs.unlink(filepath);
   await app.service('labels').patch(data._id, { status: 'complete' });
   console.log(`📦 label ${data._id} printed`);

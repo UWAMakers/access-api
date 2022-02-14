@@ -9,7 +9,10 @@ RUN apk add --no-cache \
       ca-certificates \
       ttf-freefont \
       nodejs \
-      yarn
+      yarn \
+      imagemagick
+
+RUN apk add netpbm --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
 
 # Tell Puppeteer to skip installing Chrome. We'll be using the installed package.
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
@@ -32,7 +35,7 @@ COPY yarn.lock /app/yarn.lock
 RUN yarn install --production
 
 COPY *.js /app/
-COPY *.html /app/
+COPY templates/* /app/templates/
 COPY *.png /app/
 
 EXPOSE 3000

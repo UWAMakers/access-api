@@ -3,11 +3,15 @@ const axios = require('axios');
 const fs = require('fs').promises;
 const path = require('path');
 const genLabel = require('./gen-label');
+const toBmp = require('./bmp');
 
 const dataCache = {};
-let template = '';
-fs.readFile('./template.html', 'utf8').then((data) => {
-  template = data;
+let templates = {};
+fs.readdir(path.join(__dirname, 'templates')).then((files) => {
+  return Promise.all(files.map(async (file) => {
+    const name = file.split('.')[0];
+    templates[name] = await fs.readFile(path.join(__dirname, 'templates', file), 'utf8');
+  }));
 });
 
 const host = process.env.host || 'localhost';
@@ -25,7 +29,7 @@ app.get('/render/:id', async (req, res) => {
     res.status(404).send('Not found');
     return;
   }
-  let html = `${template}`;
+  let html = `${templates[data._template || 'default']}`;
   html = html.replace(makeRegex('iconSrc'), `${url}/icon.png`);
   Object.keys(data).forEach((key) => {
     html = html.replace(makeRegex(key), data[key] || '');
@@ -43,7 +47,7 @@ app.get('/label-gen/:id', async (req, res) => {
   if (id === 'example') {
     label = {
       data: {
-        qrUri: 'https://uwamakers.com',
+        qrUri: 'mkrs.in/12345678',
         header: 'Example Label',
         subheader: 'This is an example label',
         body: 'For testing purposes only',
@@ -63,8 +67,15 @@ app.get('/label-gen/:id', async (req, res) => {
     }
   }
   dataCache[id] = label.data;
-  const labelBuffer = await genLabel(`${url}/render/${id}`);
+  dataCache[id]._template = label.template;
+  const width = req.query?.width || (req.query?.format === 'bmp' ? 380 : 0);
+  const labelBuffer = await genLabel(`${url}/render/${id}`, width);
   delete dataCache[id];
+  if (req.query?.format === 'bmp') {
+    res.set('Content-Type', 'image/bmp');
+    return res.send(await toBmp(labelBuffer, req.query?.width || 380, 1));
+  }
+
   res.set('Content-Type', 'image/png');
   res.send(labelBuffer);
 });

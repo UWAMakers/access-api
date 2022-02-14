@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 
 const asyncTimeout = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-module.exports = async (url) => {
+module.exports = async (url, width) => {
 
   const browser = await puppeteer.launch({
     headless: true,
@@ -11,7 +11,7 @@ module.exports = async (url) => {
   });
 
   const page = await browser.newPage();
-  await page.setViewport({width: 800, height: 800, deviceScaleFactor: 4});
+  await page.setViewport({width: width || 800, height: 800, deviceScaleFactor: width ? 1.6 : 4});
   await page.goto(url, {
     waitUntil: 'networkidle2',
   });
