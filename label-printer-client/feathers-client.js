@@ -35,4 +35,6 @@ app.auth = async () => {
   }
 };
 
+app.isConnected = () => socket.connected;
+
 module.exports = app;

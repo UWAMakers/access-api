@@ -11,6 +11,12 @@ let printer = {
   labelSize: '62',
 };
 
+const disablableModels = ['QL-700', 'QL-800'];
+const disableSleep = async () => {
+  if (!disablableModels.includes(printer.model)) return;
+  await exec('echo -n -e \'\\x1b\\x69\\x55\\x41\\x00\\x00\' > /dev/usb/lp0');
+};
+
 // generate random label path
 const genPath = () => path.join(__dirname, `label-${Math.random().toString(16).substring(2)}.png`);
 
@@ -51,7 +57,9 @@ const printFromQueue = async () => {
 };
 
 const heartbeat = async () => {
-  await app.service('label-printers').patch(printerId, { lastHeartbeat: new Date() });
+  if (app.isConnected()) {
+    await app.service('label-printers').patch(printerId, { lastHeartbeat: new Date() });
+  }
   setTimeout(heartbeat, 1000 * 60);
 };
 
@@ -60,6 +68,7 @@ const heartbeat = async () => {
 
   // get printer info
   printer = await app.service('label-printers').get(printerId);
+  await disableSleep();
 
   // get all existiing labels that are not complete
   const { data: labels } = await app.service('labels').find({
