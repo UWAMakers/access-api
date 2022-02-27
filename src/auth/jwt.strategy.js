@@ -3,6 +3,17 @@ const errors = require('@feathersjs/errors');
 const _ = require('lodash');
 
 class JWTStrategy extends OldStrategy {
+  async getFromMultipleServices(id, params) {
+    let result;
+    try {
+      result = await this.entityService.get(id, params);
+    } catch (err) {
+      if (err.code === 404) result = await this.app.service('label-printers').get(id, params);
+      else throw err;
+    }
+    return result;
+  }
+
   async getEntity(id, params) {
     const entityService = this.entityService;
     const { entity } = this.configuration;
@@ -11,17 +22,11 @@ class JWTStrategy extends OldStrategy {
     }
     const query = await this.getEntityQuery(params);
     const getParams = Object.assign({}, _.omit(params, 'provider'), { query });
-    let result;
-    try {
-      result = await entityService.get(id, getParams);
-    } catch (err) {
-      if (err.code === 404) result = await this.app.service('label-printers').get(id, getParams);
-      else throw err;
-    }
+    const result = this.getFromMultipleServices(id, getParams);
     if (!params.provider) {
       return result;
     }
-    return entityService.get(id, Object.assign(Object.assign({}, params), { [entity]: result }));
+    return this.getFromMultipleServices(id, Object.assign(Object.assign({}, params), { [entity]: result }));
   }
 }
 
