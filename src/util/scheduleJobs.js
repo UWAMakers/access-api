@@ -4,12 +4,13 @@ const sendScheduledNotifications = require('./jobs/sendScheduledNotifications');
 
 module.exports = (app) => {
   let lastCompletionSync = 0;
-  let running = false;
+  let runningAt = 0;
   setInterval(async () => {
-    if (running) {
+    const now = Date.now();
+    if (now - runningAt < 1000 * 60 * 15) {
       return;
     }
-    running = true;
+    runningAt = now;
     // check the quizzes every 5 min
     try {
       await processQuizzes(app);
@@ -49,7 +50,7 @@ module.exports = (app) => {
     } catch (err) {
       console.error(err);
     }
-    running = false;
+    runningAt = 0;
   }, 300 * 1000);
 
   // setTimeout(async () => {
