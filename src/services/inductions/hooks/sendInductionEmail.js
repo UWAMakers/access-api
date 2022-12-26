@@ -55,7 +55,7 @@ module.exports = (options = {}) => {
             return app.service('notifications').create({
               email: {
                 html: emailBody,
-                to: user.email,
+                to: user.preferredEmail || user.email,
                 from: app.get('SMTP_USER'),
                 subject: 'Manual email induction verification',
               },

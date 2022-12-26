@@ -4,6 +4,7 @@ const sendScheduledNotifications = require('./jobs/sendScheduledNotifications');
 
 module.exports = (app) => {
   let lastCompletionSync = 0;
+  let lastTokenCleanup = 0;
   let runningAt = 0;
   setInterval(async () => {
     const now = Date.now();
@@ -50,6 +51,18 @@ module.exports = (app) => {
     } catch (err) {
       console.error(err);
     }
+
+    // clean up tokens every 6 hours
+    try {
+      if (lastTokenCleanup < Date.now() - 6 * 60 * 60 * 1000) {
+        lastTokenCleanup = Date.now();
+        await app.service('tokens')._removeExpiredTokens();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+
+
     runningAt = 0;
   }, 300 * 1000);
 
