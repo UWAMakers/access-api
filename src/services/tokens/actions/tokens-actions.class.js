@@ -1,6 +1,6 @@
 const errors = require('@feathersjs/errors');
 
-exports.Tokens = class TokenActions {
+exports.TokenActions = class TokenActions {
 
   constructor(options, app) {
     this.options = options || {};

@@ -2,7 +2,7 @@ const { checkContext } = require('feathers-hooks-common');
 // const _ = require('lodash');
 const moment = require('moment-timezone');
 
-const { getActionEmailHtml } = require('../util/email/index');
+const { getActionEmailHtml } = require('../../../util/email/index');
 
 // eslint-disable-next-line no-unused-vars
 module.exports = (config) => async (context) => {
@@ -23,24 +23,34 @@ module.exports = (config) => async (context) => {
     },
   });
 
-  const verifyUrl = `${this.app.get('CLIENT_DOMAIN')}/verify?token=${encodeURIComponent(tokenData.token)}&action=verify_preferred_email`;
+  const verifyUrl = `${app.get('CLIENT_DOMAIN')}/verify?token=${encodeURIComponent(tokenData.token)}&action=verify_preferred_email`;
   const expires = moment(tokenData.expiresAt).fromNow();
   const html = getActionEmailHtml({
-    bodyText: `
-      Click the button below to verify your preferred email address.
-      This link will expire in ${expires}.
-      If you didn't request this, you can safely ignore this email.
+    bodyHtml: `
+      <p>
+        Hi ${result.displayName || result.firstName},
+      </p>
+      <p>
+        Click the button below to verify that this is your preferred email address.
+      </p>
+      <p>
+        This link will expire ${expires}.</br>
+        If you didn't request this, you can safely ignore this email.
+      </p>
+      <p>
+        If the button doesn't work, copy and paste the link below into your browser.</br>
+        <a href="${verifyUrl}">${verifyUrl}</a>
+      </p>
     `,
-    firstName: result.firstName,
     actionButtonText: 'Verify Email',
     actionButtonLink: verifyUrl,
   });
 
-  await this.app.service('notifications').create({
+  await app.service('notifications').create({
     email: {
       html: html,
       to: email,
-      from: this.app.get('SMTP_USER'),
+      from: app.get('SMTP_USER'),
       subject: 'Verify your preferred email address',
     },
   });

@@ -10,7 +10,7 @@ module.exports = function (app) {
     {
       key: { type: String },
       action: {
-        type: [String],
+        type: String,
         enum: [
           'magic_login',
           'magic_signup',

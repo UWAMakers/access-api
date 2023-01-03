@@ -7,8 +7,9 @@ const bcrypt = require('bcrypt');
 module.exports = (config) => async (context) => {
   checkContext(context, 'before', ['get']);
 
-  const { id, service } = context;
+  const { id, service, params } = context;
 
+  if (params.skipExisting) return context;
   const [idPart, keyPart] = id.split('.');
   if (!idPart || !keyPart) throw new errors.BadRequest('Invalid token');
 

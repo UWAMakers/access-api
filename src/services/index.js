@@ -4,6 +4,7 @@ const trainingItems = require('./training-items/training-items.service.js');
 const completions = require('./completions/completions.service.js');
 const feedback = require('./feedback/feedback.service.js');
 const inductions = require('./inductions/inductions.service.js');
+const inductionsPending = require('./inductions/pending/inductions-pending.service.js');
 const reviews = require('./reviews/reviews.service.js');
 const cards = require('./cards/cards.service.js');
 const access = require('./access/access.service.js');
@@ -22,6 +23,7 @@ module.exports = function (app) {
   app.configure(completions);
   app.configure(feedback);
   app.configure(inductions);
+  app.configure(inductionsPending);
   app.configure(reviews);
   app.configure(cards);
   app.configure(access);

@@ -4,19 +4,23 @@ const { NotAuthenticated } = require('@feathersjs/errors');
 const { getActionEmailHtml } = require('../util/email/index');
 const moment = require('moment-timezone');
 
+const domains = ['uwa.edu.au', 'student.uwa.edu.au'];
 class MagicStrategy extends LocalStrategy {
+
+  getUsernameFromEmail(email) {
+    if (email.split('@').length !== 2) return null;
+    const [username, domain] = email.split('@');
+    if (!domains.includes(domain)) return null;
+    if (!/^\d{8,10}$/.test(username)) return null;
+    return username;
+  }
 
   validateUserData(userData) {
     const { email, firstName, lastName } = userData;
-    let usernameUnverified = true;
     if (!email) throw new NotAuthenticated('Email is required');
     if (!firstName) throw new NotAuthenticated('First name is required');
     if (!lastName) throw new NotAuthenticated('Last name is required');
-    let username = userData.username;
-    if (/^\d{8,10}@student\.uwa\.edu\.au$/.test(email)) {
-      username = email.split('@')[0];
-      usernameUnverified = false;
-    }
+    const username = this.getUsernameFromEmail(email);
     if (!username) throw new NotAuthenticated('Username is required');
     return {
       email,
@@ -24,7 +28,6 @@ class MagicStrategy extends LocalStrategy {
       lastName,
       displayName: firstName,
       username,
-      usernameUnverified,
     };
   }
 
@@ -56,12 +59,22 @@ class MagicStrategy extends LocalStrategy {
     const expires = moment(tokenData.expiresAt).fromNow();
 
     const emailBody = getActionEmailHtml({
-      bodyText: `
-        Click the button below to finish ${actionCopy}.
-        This link will expire in ${expires}.
-        If you didn't request this, you can safely ignore this email.
+      bodyHtml: `
+        <p>
+          Hi ${userData.displayName || userData.firstName},
+        </p>
+        <p>
+          Click the button below to finish ${actionCopy}.
+        </p>
+        <p>
+          This link will expire ${expires}.<br>
+          If you didn't request this, you can safely ignore this email.
+        </p>
+        <p>
+          If the button doesn't work, copy and paste the link below into your browser.<br>
+          <a href="${finishUrl}">${finishUrl}</a>
+        </p>
       `,
-      firstName: userData.firstName,
       actionButtonText:  `Finish ${actionCopy}`,
       actionButtonLink: finishUrl,
     });
@@ -85,11 +98,13 @@ class MagicStrategy extends LocalStrategy {
       return this.finishWithToken(token);
     }
 
+    const username = this.getUsernameFromEmail(email);
     const [user] = await this.app.service('users').find({
       query: {
         $or: [
           { email },
           { preferredEmail: email },
+          ...(username ? [{ username }] : []),
         ],
         $limit: 1,
       },
@@ -101,16 +116,52 @@ class MagicStrategy extends LocalStrategy {
         throw new NotAuthenticated('User already exists');
       }
       const validUserData = this.validateUserData({ ...userData, email });
+      const { total } = await this.app.service('users').find({ query: { username: validUserData.username, $limit: 0 } });
+      if (total > 0) {
+        throw new NotAuthenticated('Pheme number already exists');
+      }
+      const { total: totalSignupTokens } = await this.app.service('tokens').find({
+        query: {
+          'data.email': email,
+          action: 'magic_signup',
+          usedAt: null,
+          createdAt: { $gt: moment().subtract(5, 'minute').toDate() },
+          $limit: 0,
+        },
+      });
+
+      if (totalSignupTokens > 0) {
+        throw new NotAuthenticated('Signup link already sent', { action: 'magic_signup_sent' });
+      }
+
       const tokenData = await this.app.service('tokens').create({
         action: 'magic_signup',
         data: validUserData,
       });
       await this.sendMagicLink(email, tokenData, validUserData);
-      throw new NotAuthenticated('Magic link sent');
+      throw new NotAuthenticated('Magic link sent', { action: 'magic_signup_sent' });
     }
 
     if (!user) {
-      throw new NotAuthenticated('User not found');
+      const username = this.getUsernameFromEmail(email);
+      if (!username) {
+        throw new NotAuthenticated('Email not found, if you don\'t have normal student/staff email, please contact us.');
+      } else {
+        throw new NotAuthenticated('User not found', { action: 'magic_signup_required' });
+      }
+    }
+
+    const { total: totalLoginTokens } = await this.app.service('tokens').find({
+      query: {
+        userId: user._id,
+        action: 'magic_login',
+        usedAt: null,
+        createdAt: { $gt: moment().subtract(1, 'minute').toDate() },
+        $limit: 0,
+      },
+    });
+    if (totalLoginTokens > 0) {
+      throw new NotAuthenticated('Login link already sent', { action: 'magic_login_sent' });
     }
 
     const tokenData = await this.app.service('tokens').create({
@@ -118,7 +169,7 @@ class MagicStrategy extends LocalStrategy {
       userId: user._id,
     });
     await this.sendMagicLink(email, tokenData, user);
-    throw new NotAuthenticated('Magic link sent');
+    throw new NotAuthenticated('Magic link sent', { action: 'magic_login_sent' });
   }
 }
 

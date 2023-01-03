@@ -11,6 +11,8 @@ module.exports = function (app) {
     .catch((err) => {
       logger.error(err);
       process.exit(1);
+    }).then(() => {
+      logger.info(`Connected to MongoDB: ${app.get('mongodb').split('@')[1]}`);
     });
 
   app.set('mongooseClient', mongoose);

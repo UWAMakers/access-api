@@ -13,7 +13,7 @@ const actionExpiries = {
 
 // eslint-disable-next-line no-unused-vars
 module.exports = (config) => async (context) => {
-  checkContext(context, 'before', ['patch']);
+  checkContext(context, 'before', ['create']);
 
   const { data, params } = context;
 
