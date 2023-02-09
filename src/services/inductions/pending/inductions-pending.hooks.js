@@ -1,12 +1,6 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { authorize } = require('feathers-casl').hooks;
-
-const ifChangedTo = require('../../hooks/ifChangedTo');
-const notify = require('../../hooks/notify');
-
-const mailChimpSync = require('./hooks/mailChimpSync');
-const verifyPreferredEmail = require('./hooks/verifyPreferredEmail');
-const setPreferredEmail = require('./hooks/setPreferredEmail');
+const { disallow } = require('feathers-hooks-common');
 
 module.exports = {
   before: {
@@ -15,23 +9,23 @@ module.exports = {
       authorize(), // make sure this hook runs always last
     ],
     get: [
+      disallow('external'),
       authorize(), // make sure this hook runs always last
     ],
     create: [
+      disallow('external'),
       authorize(), // make sure this hook runs always last
     ],
     update: [
-      mailChimpSync(),
+      disallow('external'),
       authorize(), // make sure this hook runs always last
-      setPreferredEmail(),
     ],
     patch: [
-      mailChimpSync(),
+      disallow('external'),
       authorize(), // make sure this hook runs always last
-      setPreferredEmail(),
     ],
     remove: [
-      mailChimpSync(),
+      disallow('external'),
       authorize(), // make sure this hook runs always last
     ],
   },
@@ -42,20 +36,9 @@ module.exports = {
     ],
     find: [],
     get: [],
-    create: [
-      ifChangedTo({ 'preferences.joinedAt': (v) => !!v }, [
-        notify('user_joined', '_id'),
-      ]),
-    ],
-    update: [
-      verifyPreferredEmail(),
-    ],
-    patch: [
-      ifChangedTo({ 'preferences.joinedAt': (v) => !!v }, [
-        notify('user_joined', '_id'),
-      ]),
-      verifyPreferredEmail(),
-    ],
+    create: [],
+    update: [],
+    patch: [],
     remove: [],
   },
 

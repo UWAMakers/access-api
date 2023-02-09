@@ -12,7 +12,8 @@
     "secret": "AUTH_SECRET",
     "authStrategies": [
       "jwt",
-      "local"
+      "local",
+      "magic"
     ],
     "jwtOptions": {
       "header": {
@@ -24,6 +25,10 @@
       "expiresIn": "14d"
     },
     "local": {
+      "usernameField": "email",
+      "passwordField": "password"
+    },
+    "magic": {
       "usernameField": "email",
       "passwordField": "password"
     }

@@ -4,6 +4,7 @@ const trainingItems = require('./training-items/training-items.service.js');
 const completions = require('./completions/completions.service.js');
 const feedback = require('./feedback/feedback.service.js');
 const inductions = require('./inductions/inductions.service.js');
+const inductionsPending = require('./inductions/pending/inductions-pending.service.js');
 const reviews = require('./reviews/reviews.service.js');
 const cards = require('./cards/cards.service.js');
 const access = require('./access/access.service.js');
@@ -12,6 +13,8 @@ const notifications = require('./notifications/notifications.service.js');
 const notificationSchedules = require('./notification-schedules/notification-schedules.service.js');
 const notificationsPreview = require('./notifications-preview/notifications-preview.service.js');
 const homeLinks = require('./home-links/home-links.service.js');
+const tokens = require('./tokens/tokens.service.js');
+const tokenActions = require('./tokens/actions/tokens-actions.service.js');
 // eslint-disable-next-line no-unused-vars
 module.exports = function (app) {
   app.configure(users);
@@ -20,6 +23,7 @@ module.exports = function (app) {
   app.configure(completions);
   app.configure(feedback);
   app.configure(inductions);
+  app.configure(inductionsPending);
   app.configure(reviews);
   app.configure(cards);
   app.configure(access);
@@ -28,4 +32,6 @@ module.exports = function (app) {
   app.configure(notificationSchedules);
   app.configure(notificationsPreview);
   app.configure(homeLinks);
+  app.configure(tokens);
+  app.configure(tokenActions);
 };

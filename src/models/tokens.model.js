@@ -1,24 +1,26 @@
-// users-model.js - A mongoose model
-//
+// tokens-model.js - A mongoose model
+// 
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
 module.exports = function (app) {
-  const modelName = 'users';
+  const modelName = 'tokens';
   const mongooseClient = app.get('mongooseClient');
-  const schema = new mongooseClient.Schema(
+  const { Schema } = mongooseClient;
+  const schema = new Schema(
     {
-      email: { type: String, unique: true, lowercase: true },
-      preferredEmail: { type: String, lowercase: true },
-      username: { type: String, unique: true, lowercase: true },
-      firstName: { type: String },
-      lastName: { type: String },
-      displayName: { type: String },
-      roles: { type: [String], enum: ['admin', 'super_admin'] },
-      preferences: {
-        joinedAt: { type: Date },
-        dark: { type: Boolean },
-        email: { type: String, lowercase: true },
+      key: { type: String },
+      action: {
+        type: String,
+        enum: [
+          'magic_login',
+          'magic_signup',
+          'verify_preferred_email',
+        ],
       },
+      data: { type: Object },
+      userId: { type: Schema.Types.ObjectId, ref: 'users' },
+      expiresAt: { type: Date },
+      usedAt: { type: Date },
       createdAt: { type: Date },
       updatedAt: { type: Date },
     },
@@ -33,4 +35,5 @@ module.exports = function (app) {
     mongooseClient.deleteModel(modelName);
   }
   return mongooseClient.model(modelName, schema);
+  
 };

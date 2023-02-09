@@ -67,10 +67,10 @@ const processQuizItem = async (app, item) => {
         ...(usernames.length ? [{ username: { $in: usernames } }] : []),
         ...(emails.length ? [
           { email: { $in: emails } },
-          { 'preferences.email': { $in: emails } },
+          { preferredEmail: { $in: emails } },
         ] : []),
       ],
-      $select: { _id: 1, username: 1, email: 1, 'preferences.email': 1 },
+      $select: { _id: 1, username: 1, email: 1, preferredEmail: 1 },
     },
     paginate: false,
   });
@@ -94,7 +94,7 @@ const processQuizItem = async (app, item) => {
       userChunk.map(async (user) => {
         const result = allResults.find((r) => r.username === user.username || (r.email && (
           r.email === user?.email
-          || r.email === user?.preferences?.email)));
+          || r.email === user?.preferredEmail)));
         if (!result) return;
         await Promise.all(trainings.map(async (training) => {
           const completion = allCompletions.find(
