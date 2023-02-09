@@ -21,7 +21,6 @@ exports.InductionsPending = class InductionsPending {
       },
       paginate: false,
     });
-    console.log(pendingInductions);
 
     const inductors = await this.app.service('users').find({
       query: {

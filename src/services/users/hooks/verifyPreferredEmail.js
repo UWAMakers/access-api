@@ -1,5 +1,4 @@
 const { checkContext } = require('feathers-hooks-common');
-// const _ = require('lodash');
 const moment = require('moment-timezone');
 
 const { getActionEmailHtml } = require('../../../util/email/index');

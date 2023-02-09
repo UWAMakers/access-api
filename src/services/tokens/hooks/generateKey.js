@@ -1,5 +1,4 @@
 const { checkContext } = require('feathers-hooks-common');
-// const _ = require('lodash');
 const uuid = require('uuid/v4');
 const bcrypt = require('bcrypt');
 const errors = require('@feathersjs/errors');
