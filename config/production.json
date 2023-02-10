@@ -9,7 +9,7 @@
     "secret": "AUTH_SECRET",
     "authStrategies": [
       "jwt",
-      "local"
+      "magic"
     ]
   }
 }
