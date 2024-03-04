@@ -89,7 +89,6 @@ app.get('/version', (req, res) => {
 
 // Configure a middleware for 404s and the error handler
 app.use((req, res) => {
-  console.log('404');
   res.sendFile(path.join(__dirname, '../', app.get('public'), 'index.html'));
 });
 app.use(express.errorHandler({ logger }));

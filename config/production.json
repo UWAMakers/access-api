@@ -9,6 +9,13 @@
       "jwt",
       "magic",
       "discord"
-    ]
+    ],
+    "oauth": {
+      "redirect": "/",
+      "origins": [
+        "https://access.uwamakers.com",
+        "https://uwamakers.com"
+      ]
+    }
   }
 }
