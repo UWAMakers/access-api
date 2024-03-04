@@ -14,8 +14,10 @@ module.exports = function (app) {
       lastName: { type: String },
       displayName: { type: String },
       roles: { type: [String], enum: ['admin', 'super_admin'] },
+      discordId: { type: String },
       preferences: {
         joinedAt: { type: Date },
+        avatarUrl: { type: String },
         dark: { type: Boolean },
         email: { type: String, lowercase: true },
       },

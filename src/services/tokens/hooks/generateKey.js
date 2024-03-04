@@ -1,5 +1,5 @@
 const { checkContext } = require('feathers-hooks-common');
-const uuid = require('uuid/v4');
+const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcrypt');
 const errors = require('@feathersjs/errors');
 
@@ -18,7 +18,7 @@ module.exports = (config) => async (context) => {
 
   if (!data.action) throw new errors.BadRequest('Action is required');
 
-  const rawKey = uuid();
+  const rawKey = uuidv4();
   data.key = await bcrypt.hash(rawKey, 10);
   data.expiresAt = new Date(Date.now() + (actionExpiries[data.action] || 0));
 

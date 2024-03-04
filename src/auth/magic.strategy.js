@@ -1,8 +1,9 @@
 
 const { LocalStrategy } = require('@feathersjs/authentication-local');
 const { NotAuthenticated } = require('@feathersjs/errors');
-const { getActionEmailHtml } = require('../util/email/index');
 const moment = require('moment-timezone');
+const { getActionEmailHtml } = require('../util/email/index');
+const { tokenToData } = require('../util/cryptMeTimbers');
 
 const domains = ['uwa.edu.au', 'student.uwa.edu.au'];
 class MagicStrategy extends LocalStrategy {
@@ -38,7 +39,11 @@ class MagicStrategy extends LocalStrategy {
     let user = null;
 
     if (action === 'magic_login') {
-      user = await this.app.service('users').get(userId);
+      if (Object.keys(data || {}).length > 0) {
+        user = await this.app.service('users')._patch(userId, data);
+      } else {
+        user = await this.app.service('users').get(userId);
+      }
     } else if (action === 'magic_signup') {
       user = await this.app.service('users').create(data);
     }
@@ -92,7 +97,12 @@ class MagicStrategy extends LocalStrategy {
   // eslint-disable-next-line no-unused-vars
   async authenticate(data, params) {
 
-    const { token, email, userData } = data;
+    const { token, email, userData, linkToken } = data;
+
+    let linkData = {};
+    if (linkToken) {
+      linkData = tokenToData(linkToken, this.app.get('authentication').secret);
+    }
 
     if (token) {
       return this.finishWithToken(token);
@@ -136,7 +146,10 @@ class MagicStrategy extends LocalStrategy {
 
       const tokenData = await this.app.service('tokens').create({
         action: 'magic_signup',
-        data: validUserData,
+        data: {
+          ...validUserData,
+          ...linkData,
+        },
       });
       await this.sendMagicLink(email, tokenData, validUserData);
       throw new NotAuthenticated('Magic link sent', { action: 'magic_signup_sent' });
@@ -167,6 +180,7 @@ class MagicStrategy extends LocalStrategy {
     const tokenData = await this.app.service('tokens').create({
       action: 'magic_login',
       userId: user._id,
+      data: linkData,
     });
     await this.sendMagicLink(email, tokenData, user);
     throw new NotAuthenticated('Magic link sent', { action: 'magic_login_sent' });

@@ -1,14 +1,14 @@
 const {
   getChannelsWithReadAbility,
-  makeOptions
-} = require('feathers-casl').channels;
+  makeChannelOptions
+} = require('feathers-casl');
 
 module.exports = function (app) {
   if (typeof app.channel !== 'function') {
     // If no real-time functionality has been configured just return
     return;
   }
-  const caslOptions = makeOptions(app);
+  const caslOptions = makeChannelOptions(app);
 
   app.on('connection', (connection) => {
     // On a new real-time connection, add it to the anonymous channel

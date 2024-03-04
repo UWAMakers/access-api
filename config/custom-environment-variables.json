@@ -1,0 +1,19 @@
+{
+  "ENV": "ENV",
+  "mongodb": "MONGO_URI",
+  "authEndpoint": "AUTH_ENDPOINT",
+  "SMTP_HOST": "SMTP_HOST",
+  "SMTP_USER": "SMTP_USER",
+  "SMTP_PASSWORD": "SMTP_PASSWORD",
+  "FEEDBACK_WEBHOOK": "FEEDBACK_WEBHOOK",
+  "port": "PORT",
+  "authentication": {
+    "secret": "AUTH_SECRET",
+    "oauth": {
+      "discord": {
+        "key": "DISCORD_CLIENT_ID",
+        "secret": "DISCORD_CLIENT_SECRET"
+      }
+    }
+  }
+}

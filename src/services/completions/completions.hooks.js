@@ -1,5 +1,5 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
-const { authorize } = require('feathers-casl').hooks;
+const { authorize } = require('feathers-casl');
 
 const distinct = require('../../hooks/distinct');
 const ifChangedTo = require('../../hooks/ifChangedTo');
@@ -7,6 +7,8 @@ const notify = require('../../hooks/notify');
 
 const complete = require('./hooks/complete');
 const setStatus = require('./hooks/setStatus');
+
+const authorizeHook = authorize({ adapter: '@feathersjs/mongodb' });
 
 const completeNotify = ifChangedTo({ status: 'complete' }, [
   notify('training_complete', 'userId', { trainingIdField: 'trainingId' }),
@@ -21,32 +23,32 @@ module.exports = {
   before: {
     all: [authenticate('jwt')],
     find: [
-      authorize(),  // make sure this hook runs always last
+      authorizeHook,  // make sure this hook runs always last
       distinct(),
     ],
     get: [
-      authorize(), // make sure this hook runs always last
+      authorizeHook, // make sure this hook runs always last
     ],
     create: [
       setStatus(),
-      authorize(), // make sure this hook runs always last
+      authorizeHook, // make sure this hook runs always last
     ],
     update: [
       setStatus(),
-      authorize(), // make sure this hook runs always last
+      authorizeHook, // make sure this hook runs always last
     ],
     patch: [
       setStatus(),
-      authorize(), // make sure this hook runs always last
+      authorizeHook, // make sure this hook runs always last
     ],
     remove: [
-      authorize(), // make sure this hook runs always last
+      authorizeHook, // make sure this hook runs always last
     ],
   },
 
   after: {
     all: [
-      authorize(), // make sure this hook runs always first
+      authorizeHook, // make sure this hook runs always first
     ],
     find: [],
     get: [],

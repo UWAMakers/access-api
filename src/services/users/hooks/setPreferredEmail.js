@@ -6,7 +6,7 @@ module.exports = (config) => async (context) => {
 
   const { existing, data } = context;
 
-  const email = data.preferredEmail;
+  const email = data.preferredEmail || existing.preferredEmail;
   if (email === existing.preferredEmail) {
     return context;
   }
