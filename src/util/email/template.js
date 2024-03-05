@@ -7,7 +7,7 @@ const {
 const marked = require('marked');
 
 const compileMarkdown = (text) => {
-  return marked(text);
+  return marked.parse(text);
 };
 
 const fix = (name = '') => name.trim().replace(/\s+\(\d+\)$/, '');
