@@ -25,7 +25,7 @@ const castObjectIds = (val) => {
   if(Array.isArray(val) && val.length !== 24) return val.map(castObjectIds);
   const stringVal = (val && val.toJSON && val.toJSON()) || `${val}`;
   if(isoReg.test(stringVal)) return new Date(stringVal);
-  if(/^[abcdefABCDEF\d]{24}$/.test(stringVal)) return new mongoose.ObjectId(stringVal);
+  if(/^[abcdefABCDEF\d]{24}$/.test(stringVal)) return new mongoose.Types.ObjectId(stringVal);
   if(Array.isArray(val)) return val.map(castObjectIds);
   if (!val) return val;
   if(typeof val === 'object') return Object.keys(val).reduce((a, i) => ({...a, [i]: castObjectIds(val[i])}), {});
@@ -54,6 +54,9 @@ module.exports = function (excludeFields = []) {
       throw new errors.BadRequest('Missing $distinct: Which field should be distinct?');
     }
     if (!$distinct) return context;
+
+    if (filters.$and) query.$and = filters.$and;
+    if (filters.$or) query.$or = filters.$or;
 
     // Throw error if field is restricted
     if (excludeFields.some(field => {
