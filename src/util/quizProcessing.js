@@ -58,6 +58,13 @@ const loadScores = async ({ csvUrl, expiry }) => {
 };
 
 const processQuizItem = async (app, item) => {
+  const trainings = await app.service('trainings').find({
+    query: {
+      itemIds: item._id,
+    },
+    paginate: false,
+  });
+  if (!trainings.length) return;
   const allResults = await loadScores(item);
   const usernames = _.uniq(allResults.map((v) => v.username)).filter(Boolean);
   const emails = _.uniq(allResults.map((v) => v.email)).filter(Boolean);
@@ -74,12 +81,7 @@ const processQuizItem = async (app, item) => {
     },
     paginate: false,
   });
-  const trainings = await app.service('trainings').find({
-    query: {
-      itemIds: item._id,
-    },
-    paginate: false,
-  });
+  if (!users.length) return;
   const allCompletions = await app.service('completions').find({
     query: {
       userId: { $in: users.map((u) => u._id) },
