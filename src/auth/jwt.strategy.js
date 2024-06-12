@@ -1,8 +1,8 @@
-const { JWTStrategy: OldStrategy } = require('@feathersjs/authentication');
+const { JWTStrategy: OriginalJWTStrategy } = require('@feathersjs/authentication');
 const errors = require('@feathersjs/errors');
 const _ = require('lodash');
 
-class JWTStrategy extends OldStrategy {
+class JWTStrategy extends OriginalJWTStrategy {
   async getFromMultipleServices(id, params) {
     let result;
     try {
@@ -22,7 +22,7 @@ class JWTStrategy extends OldStrategy {
     }
     const query = await this.getEntityQuery(params);
     const getParams = Object.assign({}, _.omit(params, 'provider'), { query });
-    const result = this.getFromMultipleServices(id, getParams);
+    const result = await this.getFromMultipleServices(id, getParams);
     if (!params.provider) {
       return result;
     }

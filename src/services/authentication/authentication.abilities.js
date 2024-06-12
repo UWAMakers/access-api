@@ -1,9 +1,9 @@
 // src/services/authentication/authentication.abilities.js
 const {
+  createMongoAbility,
   AbilityBuilder,
   createAliasResolver,
-  makeAbilityFromRules,
-} = require('feathers-casl');
+} = require('@casl/ability');
 
 // don't forget this, as `read` is used internally
 const resolveAction = createAliasResolver({
@@ -14,7 +14,7 @@ const resolveAction = createAliasResolver({
 
 const defineRulesFor = async (user, app) => {
   // also see https://casl.js.org/v5/en/guide/define-rules
-  const { can, cannot, rules } = new AbilityBuilder();
+  const { can, cannot, rules } = new AbilityBuilder(createMongoAbility);
 
   if (user.isLabelPrinter) {
     can('manage', 'labels', { printerId: user._id });
@@ -23,13 +23,13 @@ const defineRulesFor = async (user, app) => {
     return rules;
   }
 
-  if (user.roles.includes('super_admin')) {
+  if (user.roles?.includes('super_admin')) {
     // super_admin can do evil
     can('manage', 'all');
     return rules;
   }
 
-  if (user.roles.includes('admin')) {
+  if (user.roles?.includes('admin')) {
     can('manage', 'home-links');
     can('manage', 'trainings');
     can('manage', 'training-items');
@@ -52,6 +52,7 @@ const defineRulesFor = async (user, app) => {
   can('read', 'home-links');
   can('read', 'trainings');
   can('read', 'training-items');
+  can('read', 'inductions-pending');
   can('read', 'completions', userId('userId'));
   can('read', 'reviews', userId('userId'));
   can('update', 'users', ['displayName', 'preferences'], userId());
@@ -75,7 +76,7 @@ const defineRulesFor = async (user, app) => {
 const defineAbilitiesFor = async (user, app) => {
   const rules = await defineRulesFor(user, app);
 
-  return makeAbilityFromRules(rules, { resolveAction });
+  return createMongoAbility(rules, { resolveAction });
 };
 
 module.exports = {

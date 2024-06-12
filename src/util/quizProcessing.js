@@ -58,6 +58,13 @@ const loadScores = async ({ csvUrl, expiry }) => {
 };
 
 const processQuizItem = async (app, item) => {
+  const trainings = await app.service('trainings').find({
+    query: {
+      itemIds: item._id,
+    },
+    paginate: false,
+  });
+  if (!trainings.length) return;
   const allResults = await loadScores(item);
   const usernames = _.uniq(allResults.map((v) => v.username)).filter(Boolean);
   const emails = _.uniq(allResults.map((v) => v.email)).filter(Boolean);
@@ -67,19 +74,14 @@ const processQuizItem = async (app, item) => {
         ...(usernames.length ? [{ username: { $in: usernames } }] : []),
         ...(emails.length ? [
           { email: { $in: emails } },
-          { 'preferences.email': { $in: emails } },
+          { preferredEmail: { $in: emails } },
         ] : []),
       ],
-      $select: { _id: 1, username: 1, email: 1, 'preferences.email': 1 },
+      $select: { _id: 1, username: 1, email: 1, preferredEmail: 1 },
     },
     paginate: false,
   });
-  const trainings = await app.service('trainings').find({
-    query: {
-      itemIds: item._id,
-    },
-    paginate: false,
-  });
+  if (!users.length) return;
   const allCompletions = await app.service('completions').find({
     query: {
       userId: { $in: users.map((u) => u._id) },
@@ -94,7 +96,7 @@ const processQuizItem = async (app, item) => {
       userChunk.map(async (user) => {
         const result = allResults.find((r) => r.username === user.username || (r.email && (
           r.email === user?.email
-          || r.email === user?.preferences?.email)));
+          || r.email === user?.preferredEmail)));
         if (!result) return;
         await Promise.all(trainings.map(async (training) => {
           const completion = allCompletions.find(

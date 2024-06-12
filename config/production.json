@@ -1,15 +1,21 @@
 {
   "host": "access.uwamakers.com",
-  "port": "PORT",
   "CATCH_NOTIFICATIONS": false,
   "CLIENT_DOMAIN": "https://access.uwamakers.com",
   "authentication": {
     "entity": "user",
     "service": "users",
-    "secret": "AUTH_SECRET",
     "authStrategies": [
       "jwt",
-      "local"
-    ]
+      "magic",
+      "discord"
+    ],
+    "oauth": {
+      "redirect": "/",
+      "origins": [
+        "https://access.uwamakers.com",
+        "https://uwamakers.com"
+      ]
+    }
   }
 }

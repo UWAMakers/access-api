@@ -4,12 +4,14 @@ const sendScheduledNotifications = require('./jobs/sendScheduledNotifications');
 
 module.exports = (app) => {
   let lastCompletionSync = 0;
-  let running = false;
+  let lastTokenCleanup = 0;
+  let runningAt = 0;
   setInterval(async () => {
-    if (running) {
+    const now = Date.now();
+    if (now - runningAt < 1000 * 60 * 15) {
       return;
     }
-    running = true;
+    runningAt = now;
     // check the quizzes every 5 min
     try {
       await processQuizzes(app);
@@ -49,7 +51,19 @@ module.exports = (app) => {
     } catch (err) {
       console.error(err);
     }
-    running = false;
+
+    // clean up tokens every 6 hours
+    try {
+      if (lastTokenCleanup < Date.now() - 6 * 60 * 60 * 1000) {
+        lastTokenCleanup = Date.now();
+        await app.service('tokens')._removeExpiredTokens();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+
+
+    runningAt = 0;
   }, 300 * 1000);
 
   // setTimeout(async () => {

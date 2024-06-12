@@ -7,7 +7,7 @@ const {
 const marked = require('marked');
 
 const compileMarkdown = (text) => {
-  return marked(text);
+  return marked.parse(text);
 };
 
 const fix = (name = '') => name.trim().replace(/\s+\(\d+\)$/, '');
@@ -84,7 +84,7 @@ const sendTemplate = async (app, templateId, userIds, usersContext = {}, cache =
     return app.service('notifications').create({
       email: {
         html: emailHtml,
-        to: recipient.preferences?.email || recipient.email,
+        to: recipient.preferredEmail || recipient.email,
         cc: template.cc,
         bcc: template.bcc,
         from: app.get('SMTP_USER'),

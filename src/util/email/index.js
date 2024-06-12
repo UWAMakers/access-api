@@ -31,10 +31,9 @@ exports.getActionEmailHtml = ({
       <!-- Intro text -->
     </mj-raw>
     <mj-section background-color="#fafafa">
-      <mj-column width="400px">
-        ${bodyText ? `<mj-text color="#525252">${bodyText}.</mj-text>` : ''}
-        <mj-text>
-        ${bodyHtml ? `<mj-raw>${bodyHtml}</mj-raw>` : ''}
+      <mj-column width="400px" font-size="16px">
+        <mj-text color="#525252">
+        ${bodyHtml || bodyText || ''}
         </mj-text>
         ${actionButtonLink  ? `<mj-button background-color="#ff2709" href="${actionButtonLink}">${actionButtonText || 'Click Me!'}</mj-button>` : ''}
       </mj-column>

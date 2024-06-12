@@ -6,7 +6,7 @@ const {compileTemplate, getRenderContext} = require('../../util/email/template.j
 const marked = require('marked');
 
 const compileMarkdown = (text) => {
-  return marked(text);
+  return marked.parse(text);
 };
 
 exports.NotificationsPreview = class NotificationsPreview  {
