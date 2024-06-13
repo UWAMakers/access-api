@@ -69,7 +69,7 @@ const heartbeat = async () => {
   setTimeout(heartbeat, 1000 * 60);
 };
 
-const poll = async () => {
+const poll = async (first = false) => {
   if (app.isConnected()) {
     const existingIds = queue.map((label) => label._id);
     if (active) existingIds.push(active._id);
@@ -82,10 +82,10 @@ const poll = async () => {
       },
     });
     queue.push(...labels);
-    console.log(`📦 ${labels.length} labels queued`)
+    if (labels.length || first) console.log(`📦 ${labels.length} labels queued`)
   }
   if (!pollingInterval) return;
-  setTimeout(poll, pollingInterval);
+  setTimeout(() => poll(), pollingInterval);
 };
 
 (async () => {
@@ -96,7 +96,7 @@ const poll = async () => {
   await disableSleep();
 
   // get all existing labels that are not complete
-  await poll();
+  await poll(true);
 
   // listen for new labels
   const handleEvent = (label) => {
