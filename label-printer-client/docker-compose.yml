@@ -21,6 +21,7 @@ services:
       - LABEL_GEN_URL=http://label-generator:3000/label-gen
       - PRINTER_ID=61f9417460693609c8bdd48d
       - PRINTER_SECRET=secret
+      - POLLING_INTERVAL=5000
     devices:
       - /dev/usb/lp0
     networks:

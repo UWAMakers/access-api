@@ -5,6 +5,10 @@ const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const app = require('./feathers-client');
 
+const pollingInterval = process.env.POLLING_INTERVAL
+  ? (parseInt(process.env.POLLING_INTERVAL, 10) || 0)
+  : 0;
+
 const printerId = process.env.PRINTER_ID;
 let printer = {
   model: 'QL-700',
@@ -49,10 +53,12 @@ const printLabel = async (data) => {
 
 // queue labels for printing
 const queue = [];
+let active = null;
 const printFromQueue = async () => {
   if (queue.length === 0) return setTimeout(printFromQueue, 100);
-  const data = queue.shift();
-  await printLabel(data);
+  active = queue.shift();
+  await printLabel(active);
+  active = null;
   setTimeout(printFromQueue, 100);
 };
 
@@ -63,6 +69,25 @@ const heartbeat = async () => {
   setTimeout(heartbeat, 1000 * 60);
 };
 
+const poll = async () => {
+  if (app.isConnected()) {
+    const existingIds = queue.map((label) => label._id);
+    if (active) existingIds.push(active._id);
+    const { data: labels } = await app.service('labels').find({
+      query: {
+        ...(existingIds.length ? { _id: { $nin: existingIds } } : {}),
+        status: 'pending',
+        printerId,
+        $limit: null,
+      },
+    });
+    queue.push(...labels);
+    console.log(`📦 ${labels.length} labels queued`)
+  }
+  if (!pollingInterval) return;
+  setTimeout(poll, pollingInterval);
+};
+
 (async () => {
   await app.auth();
 
@@ -70,16 +95,8 @@ const heartbeat = async () => {
   printer = await app.service('label-printers').get(printerId);
   await disableSleep();
 
-  // get all existiing labels that are not complete
-  const { data: labels } = await app.service('labels').find({
-    query: {
-      status: 'pending',
-      printerId,
-      $limit: null,
-    },
-  });
-  queue.push(...labels);
-  console.log(`📦 ${labels.length} labels queued`);
+  // get all existing labels that are not complete
+  await poll();
 
   // listen for new labels
   const handleEvent = (label) => {
