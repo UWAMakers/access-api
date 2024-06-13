@@ -7,8 +7,9 @@ const axios = require('axios');
 const socket = io(process.env.API_URL, { transports: ['websocket'], timeout: 30*1000 });
 const app = feathers();
 
+socket.on('connect', () => console.log('connected'));
 socket.on('disconnect', (reason) => console.log('disconnect', reason));
-socket.on('connect_error', (error) => console.log('connect_error', error));
+socket.on('connect_error', (error) => console.log('connect_error', error.message));
 
 console.log('🔌 Connecting to: ', process.env.API_URL);
 
