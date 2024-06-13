@@ -14,7 +14,7 @@ module.exports = () => ifChangedTo({ status: 'pending' }, [async (context) => {
   const printers = await app.service('label-printers').find({
     query: {
       disabled: { $ne: true },
-      // lastHeartbeat: { $gte: new Date(Date.now() - (5 * 60 * 1000)) },
+      active: true,
       $select: { _id: 1 },
     },
     paginate: false,

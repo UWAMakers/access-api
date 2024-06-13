@@ -48,6 +48,8 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+// cors exemption for the label-icon.png
+app.get('/label-icon.png', cors());
 app.use(compress());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

@@ -20,7 +20,7 @@ module.exports = function (app) {
     // real-time connection, e.g. when logging in via REST
     if (connection) {
       // Obtain the logged in user from the connection
-      // const user = connection.user;
+      const user = connection.user;
 
       // The connection is no longer anonymous, remove it
       app.channel('anonymous').leave(connection);
@@ -29,6 +29,10 @@ module.exports = function (app) {
       app.channel('authenticated').join(connection);
 
       // Channels can be named anything and joined on any condition
+
+      if (user.isLabelPrinter) {
+        app.channel('label-printers').join(connection);
+      }
 
       // E.g. to send real-time events only to admins use
       // if(user.isAdmin) { app.channel('admins').join(connection); }

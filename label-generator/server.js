@@ -1,26 +1,16 @@
 const express = require('express');
 const axios = require('axios');
-const fs = require('fs').promises;
-const path = require('path');
 const genLabel = require('./gen-label');
 const toBmp = require('./bmp');
 
 const dataCache = {};
-let templates = {};
-fs.readdir(path.join(__dirname, 'templates')).then((files) => {
-  return Promise.all(files.map(async (file) => {
-    const name = file.split('.')[0];
-    templates[name] = await fs.readFile(path.join(__dirname, 'templates', file), 'utf8');
-  }));
-});
 
-const host = process.env.host || 'localhost';
-const port = process.env.port || 3000;
+const host = process.env.HOST || 'localhost';
+const port = process.env.PORT || 3000;
 const url = `http://${host}:${port}`;
 
 const app = express();
 
-const makeRegex = (str) => new RegExp(`{{${str}}}`, 'g');
 app.get('/render/:id', async (req, res) => {
   const id = req.params.id;
   const data = dataCache[id];
@@ -29,17 +19,10 @@ app.get('/render/:id', async (req, res) => {
     res.status(404).send('Not found');
     return;
   }
-  let html = `${templates[data._template || 'default']}`;
-  html = html.replace(makeRegex('iconSrc'), `${url}/icon.png`);
-  Object.keys(data).forEach((key) => {
-    html = html.replace(makeRegex(key), data[key] || '');
-  });
 
   res.set('Content-Type', 'text/html');
-  res.send(html);
+  res.send(data);
 });
-
-app.get('/icon.png', (req, res) => res.sendFile(path.join(__dirname, 'icon.png')));
 
 app.get('/label-gen/:id', async (req, res) => {
   const id = req.params.id;
@@ -57,17 +40,19 @@ app.get('/label-gen/:id', async (req, res) => {
   } else {
     try {
       const { data } = await axios.get(`${process.env.API_URL}/labels/${id}`, {
-        headers: req.headers,
+        headers: {
+          authorization: req.headers.authorization,
+        }
       });
       label = data;
+      if (!label?.html) throw new Error('No html provided');
     } catch (err) {
-      console.error(err.message);
+      console.error(err.message, err.response);
       res.status(404).send('Not found');
       return;
     }
   }
-  dataCache[id] = label.data;
-  dataCache[id]._template = label.template;
+  dataCache[id] = label.html;
   const width = req.query?.width || (req.query?.format === 'bmp' ? 380 : 0);
   const labelBuffer = await genLabel(`${url}/render/${id}`, width);
   delete dataCache[id];

@@ -6,24 +6,43 @@
   <div class="main-wrapper">
     <div class="images">
       <div class="qr">
-        <img class="qr-img" data-uri="{{qrUri}}" />
+        <div class="makers">
+          <img class="icon-img" crossorigin="anonymous" src="{{iconSrc}}" />
+          {{brandName}}
+        </div>
+        <img class="qr-img" data-uri="{{label.data.qrUri}}" />
+        <div class="text-header">
+          {{label.data.header}}
+        </div>
+        <div class="text-id">
+          {{label.data.footer}}
+        </div>
       </div>
-      <div class="icon">
-        <img src="{{iconSrc}}" />
+      <div class="qr">
+        <div class="makers">
+          <img class="icon-img" crossorigin="anonymous" src="{{iconSrc}}" />
+          {{brandName}}
+        </div>
+        <img class="qr-img" data-uri="{{label.data.qrUri}}" />
+        <div class="text-header">
+          {{label.data.header}}
+        </div>
+        <div class="text-id">
+          {{label.data.footer}}
+        </div>
       </div>
-    </div>
-    <div class="text-wrapper">
-      <h1 class="text-header">
-        {{header}}
-      </h1>
-      <div class="text-subheading">
-        {{subheader}}
-      </div>
-      <div class="text-body">
-        {{body}}
-      </div>
-      <div class="text-id">
-        {{footer}}
+      <div class="qr">
+        <div class="makers">
+          <img class="icon-img" crossorigin="anonymous" src="{{iconSrc}}" />
+          {{brandName}}
+        </div>
+        <img class="qr-img" data-uri="{{label.data.qrUri}}" />
+        <div class="text-header">
+          {{label.data.header}}
+        </div>
+        <div class="text-id">
+          {{label.data.footer}}
+        </div>
       </div>
     </div>
   </div>
@@ -72,7 +91,7 @@
     }
 
     .text-header {
-      font-size: 2em;
+      font-size: 0.8em;
       font-weight: bold;
       margin-bottom: 0.5em;
       margin-block-start: unset;
@@ -92,10 +111,26 @@
 
     .images {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: center;
       justify-content: center;
-      width: 15%;
+      width: 100%;
+    }
+    .qr {
+      width: 33%;
+      margin: 0 8px;
+      text-align: center;
+    }
+    .makers {
+      font-size: 0.75em;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .icon-img {
+      width: 1em;
+      margin-right: 2px;
     }
   </style>
   <script>

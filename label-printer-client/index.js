@@ -91,5 +91,5 @@ const heartbeat = async () => {
 
   // start printing
   printFromQueue();
-  heartbeat();
+  // heartbeat();
 })();

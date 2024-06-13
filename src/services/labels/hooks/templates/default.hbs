@@ -6,39 +6,24 @@
   <div class="main-wrapper">
     <div class="images">
       <div class="qr">
-        <div class="makers">
-          <img class="icon-img" src="../icon.png" />
-          Makers
-        </div>
-        <img class="qr-img" data-uri="{{qrUri}}" />
+        <img class="qr-img" data-uri="{{label.data.qrUri}}" />
       </div>
-      <div class="qr">
-        <div class="makers">
-          <img class="icon-img" src="../icon.png" />
-          Makers
-        </div>
-        <img class="qr-img" data-uri="{{qrUri}}" />
+      <div class="icon">
+        <img crossorigin="anonymous" src="{{iconSrc}}" />
       </div>
-      <div class="qr">
-        <div class="makers">
-          <img class="icon-img" src="../icon.png" />
-          Makers
-        </div>
-        <img class="qr-img" data-uri="{{qrUri}}" />
+    </div>
+    <div class="text-wrapper">
+      <h1 class="text-header">
+        {{label.data.header}}
+      </h1>
+      <div class="text-subheading">
+        {{label.data.subheader}}
       </div>
-      <div class="qr">
-        <div class="makers">
-          <img class="icon-img" src="../icon.png" />
-          Makers
-        </div>
-        <img class="qr-img" data-uri="{{qrUri}}" />
+      <div class="text-body">
+        {{label.data.body}}
       </div>
-      <div class="qr">
-        <div class="makers">
-          <img class="icon-img" src="../icon.png" />
-          Makers
-        </div>
-        <img class="qr-img" data-uri="{{qrUri}}" />
+      <div class="text-id">
+        {{label.data.footer}}
       </div>
     </div>
   </div>
@@ -87,7 +72,7 @@
     }
 
     .text-header {
-      font-size: 0.8em;
+      font-size: 2em;
       font-weight: bold;
       margin-bottom: 0.5em;
       margin-block-start: unset;
@@ -107,26 +92,10 @@
 
     .images {
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      width: 100%;
-    }
-    .qr {
-      width: 20%;
-      margin: 0 4px;
-      text-align: center;
-    }
-    .makers {
-      font-size: 0.75em;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .icon-img {
-      width: 1em;
-      margin-right: 2px;
+      width: 15%;
     }
   </style>
   <script>

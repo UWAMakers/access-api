@@ -1,42 +1,47 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
-const { authorize } = require('feathers-casl').hooks;
-
+const { authorize } = require('feathers-casl');
 const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
-const { alterItems } = require('feathers-hooks-common');
+
+const queryActivePrinters = require('./hooks/queryActivePrinters');
+const markActive = require('./hooks/markActive');
+
+const authorizeHook = authorize({ adapter: '@feathersjs/mongodb' });
+const hashPasswordHook = hashPassword('password', { strategy: 'label-printer' });
 
 module.exports = {
   before: {
-    all: [authenticate('jwt')],
+    all: [
+      authenticate('jwt'),
+      queryActivePrinters(),
+    ],
     find: [
-      authorize(),  // make sure this hook runs always last
+      authorizeHook,  // make sure this hook runs always last
     ],
     get: [
-      authorize(), // make sure this hook runs always last
+      authorizeHook, // make sure this hook runs always last
     ],
     create: [
-      authorize(), // make sure this hook runs always last
-      hashPassword('password'),
+      authorizeHook, // make sure this hook runs always last
+      hashPasswordHook,
     ],
     update: [
-      authorize(), // make sure this hook runs always last
-      hashPassword('password'),
+      authorizeHook, // make sure this hook runs always last
+      hashPasswordHook,
     ],
     patch: [
-      authorize(), // make sure this hook runs always last
-      hashPassword('password'),
+      authorizeHook, // make sure this hook runs always last
+      hashPasswordHook,
     ],
     remove: [
-      authorize(), // make sure this hook runs always last
+      authorizeHook, // make sure this hook runs always last
     ]
   },
 
   after: {
     all: [
-      authorize(), // make sure this hook runs always first
+      authorizeHook, // make sure this hook runs always first
       protect('password'),
-      alterItems(item => {
-        item.isLabelPrinter = true;
-      }),
+      markActive(),
     ],
     find: [],
     get: [],
