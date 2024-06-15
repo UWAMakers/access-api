@@ -135,7 +135,7 @@ class MagicStrategy extends LocalStrategy {
           'data.email': email,
           action: 'magic_signup',
           usedAt: null,
-          createdAt: { $gt: moment().subtract(5, 'minute').toDate() },
+          createdAt: { $gt: moment().subtract(1, 'minute').toDate() },
           $limit: 0,
         },
       });

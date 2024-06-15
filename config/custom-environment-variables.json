@@ -6,6 +6,7 @@
   "SMTP_USER": "SMTP_USER",
   "SMTP_PASSWORD": "SMTP_PASSWORD",
   "FEEDBACK_WEBHOOK": "FEEDBACK_WEBHOOK",
+  "CLIENT_DOMAIN": "CLIENT_DOMAIN",
   "port": "PORT",
   "authentication": {
     "secret": "AUTH_SECRET",
