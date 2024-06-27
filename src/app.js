@@ -40,6 +40,9 @@ app.use(
 const corsOptions = {
   origin: [
     /\.uwamakers\.com$/,
+    /\.access-neo\.pages\.dev$/,
+    'https://uwamakers.com',
+    'https://access-neo.pages.dev',
     process.env.BUILD_STAGE !== 'production' ? [
       /localhost(:\d+)?$/,
     ] : [],

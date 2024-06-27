@@ -29,6 +29,7 @@ const render = (label, apiUrl = guessedUrl) => {
   return html;
 };
 
+// eslint-disable-next-line no-unused-vars
 module.exports = (options = {}) => (context) => {
   checkContext(context, 'after', null);
 

@@ -24,6 +24,3 @@ jobs:
         run: |
           docker build --no-cache -t uwashl/access:latest .
           docker push uwashl/access:latest
-          cd label-generator
-          docker build --no-cache -t uwashl/access-label-gen:latest .
-          docker push uwashl/access-label-gen:latest

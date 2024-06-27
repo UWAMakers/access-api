@@ -2,12 +2,13 @@ const { checkContext } = require('feathers-hooks-common');
 const moment = require('moment-timezone');
 
 const { getActionEmailHtml } = require('../../../util/email/index');
+const getClientDomain = require('../../../util/getClientDomain');
 
 // eslint-disable-next-line no-unused-vars
 module.exports = (config) => async (context) => {
   checkContext(context, 'after', ['patch', 'update']);
 
-  const { result, existing, app } = context;
+  const { result, existing, app, params } = context;
 
   const email = result.preferences?.email;
   if (!email || email === existing.preferences?.email) {
@@ -22,7 +23,7 @@ module.exports = (config) => async (context) => {
     },
   });
 
-  const verifyUrl = `${app.get('CLIENT_DOMAIN')}/verify?token=${encodeURIComponent(tokenData.token)}&action=verify_preferred_email`;
+  const verifyUrl = `${getClientDomain(params, app)}/verify?token=${encodeURIComponent(tokenData.token)}&action=verify_preferred_email`;
   const expires = moment(tokenData.expiresAt).fromNow();
   const html = getActionEmailHtml({
     bodyHtml: `

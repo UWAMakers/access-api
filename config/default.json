@@ -45,7 +45,9 @@
         "http://localhost:8080",
         "http://localhost:3000",
         "https://access.uwamakers.com",
-        "https://uwamakers.com"
+        "https://neo.uwamakers.com",
+        "https://uwamakers.com",
+        "https://access-neo.pages.dev"
       ],
       "discord": {
         "key": "DISCORD_CLIENT_ID",
