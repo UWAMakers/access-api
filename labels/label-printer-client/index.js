@@ -62,12 +62,12 @@ const printFromQueue = async () => {
   setTimeout(printFromQueue, 100);
 };
 
-const heartbeat = async () => {
-  if (app.isConnected()) {
-    await app.service('label-printers').patch(printerId, { lastHeartbeat: new Date() });
-  }
-  setTimeout(heartbeat, 1000 * 60);
-};
+// const heartbeat = async () => {
+//   if (app.isConnected()) {
+//     await app.service('label-printers').patch(printerId, { lastHeartbeat: new Date() });
+//   }
+//   setTimeout(heartbeat, 1000 * 60);
+// };
 
 const poll = async (first = false) => {
   if (app.isConnected()) {
@@ -82,7 +82,7 @@ const poll = async (first = false) => {
       },
     });
     queue.push(...labels);
-    if (labels.length || first) console.log(`📦 ${labels.length} labels queued`)
+    if (labels.length || first) console.log(`📦 ${labels.length} labels queued`);
   }
   if (!pollingInterval) return;
   setTimeout(() => poll(), pollingInterval);
