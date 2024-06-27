@@ -13,6 +13,7 @@
     "authStrategies": [
       "jwt",
       "local",
+      "label-printer",
       "magic",
       "discord"
     ],
@@ -29,6 +30,11 @@
       "usernameField": "email",
       "passwordField": "password"
     },
+    "label-printer": {
+      "service": "label-printers",
+      "usernameField": "_id",
+      "passwordField": "password"
+    },
     "magic": {
       "usernameField": "email",
       "passwordField": "password"
@@ -37,8 +43,11 @@
       "redirect": "/",
       "origins": [
         "http://localhost:8080",
+        "http://localhost:3000",
         "https://access.uwamakers.com",
-        "https://uwamakers.com"
+        "https://neo.uwamakers.com",
+        "https://uwamakers.com",
+        "https://access-neo.pages.dev"
       ],
       "discord": {
         "key": "DISCORD_CLIENT_ID",

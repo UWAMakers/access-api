@@ -41,12 +41,12 @@ exports.getActionEmailHtml = ({
     <mj-section background-color="#fafafa">
       <mj-column>
         <mj-social border-radius="0" icon-size="40px" mode="horizontal" line-height="0">
-          <mj-social-element src="https://res.cloudinary.com/db8zpy2k5/image/upload/v1624161418/slack_tfrfbj.svg" target="_blank" name="slack" href="https://makeuwa.slack.com" alt="Slack">
+          <mj-social-element src="https://cdn.simpleicons.org/discord/black" target="_blank" name="slack" href="https://discord.com/invite/Axw2kJ8GbQ" alt="Discord">
           </mj-social-element>
-          <mj-social-element target="_blank" src="https://res.cloudinary.com/db8zpy2k5/image/upload/v1623570761/facebook_uj5yez.svg" href="https://www.facebook.com/uwamakers/" alt="Facebook">
+          <mj-social-element target="_blank" src="https://cdn.simpleicons.org/facebook/black" href="https://www.facebook.com/uwamakers/" alt="Facebook">
 
           </mj-social-element>
-          <mj-social-element target="_blank" src="https://res.cloudinary.com/db8zpy2k5/image/upload/v1624161323/instagram_ktbjqh.svg" href="https://www.instagram.com/uwa_makers/?hl=en" alt="Instagram">
+          <mj-social-element target="_blank" src="https://cdn.simpleicons.org/instagram/black" href="https://www.instagram.com/uwa_makers/?hl=en" alt="Instagram">
 
           </mj-social-element>
         </mj-social>

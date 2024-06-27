@@ -1,3 +1,6 @@
+const { authenticate } = require('@feathersjs/authentication').hooks;
+const { defineAbilitiesFor } = require('./services/authentication/authentication.abilities');
+
 const stashExisting = async (context) => {
   const { service, id, params, path, method } = context;
   if (
@@ -12,9 +15,28 @@ const stashExisting = async (context) => {
   return context;
 };
 
+const doubleCheckAbilities = async (context) => {
+  if (context.params?.provider && !context.params?.user) {
+    try {
+      await authenticate('jwt')(context);
+    } catch (error) {
+      return context;
+    }
+  }
+  const { user } = context?.params || {};
+  if (!user || context.params?.ability) return context;
+  const ability = await defineAbilitiesFor(user, context.app);
+  context.params.ability = ability;
+  context.params.rules = ability.rules;
+  if (context.params?.connection) {
+    context.params.connection.ability = ability;
+  }
+  return context;
+};
+
 module.exports = {
   before: {
-    all: [],
+    all: [doubleCheckAbilities],
     find: [],
     get: [stashExisting],
     create: [],

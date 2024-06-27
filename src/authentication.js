@@ -1,7 +1,7 @@
 const {
   AuthenticationService,
 } = require('@feathersjs/authentication');
-// const { LocalStrategy } = require('@feathersjs/authentication-local');
+const { LocalStrategy } = require('@feathersjs/authentication-local');
 const { oauth } = require('@feathersjs/authentication-oauth');
 // const PhemeStrategy = require('./auth/pheme.strategy');
 const JWTStrategy = require('./auth/jwt.strategy');
@@ -14,6 +14,7 @@ module.exports = (app) => {
 
   authentication.register('jwt', new JWTStrategy());
   // authentication.register('local', new PhemeStrategy());
+  authentication.register('label-printer', new LocalStrategy());
   authentication.register('magic', new MagicStrategy());
   authentication.register('discord', new OAuthStrategy());
 

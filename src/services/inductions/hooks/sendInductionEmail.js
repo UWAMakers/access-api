@@ -4,12 +4,13 @@ const {
   createInductionEmailBody,
   getActionEmailHtml,
 } = require('../../../util/email/index');
+const getClientDomain = require('../../../util/getClientDomain');
 
 // eslint-disable-next-line no-unused-vars
 module.exports = (options = {}) => {
   return async (context) => {
     checkContext(context, 'after', ['create', 'patch']);
-    const { result, app } = context;
+    const { result, app, params } = context;
     const { keys, inductorId, itemId } = result;
     const userIdsToConfirm = keys.reduce(
       (acc, { userIds = [], emailSent = false }) => {
@@ -40,7 +41,7 @@ module.exports = (options = {}) => {
     Promise.all(
       keys.map(async ({ key, userIds, emailSent, _id }) => {
         if (emailSent || !userIds.length) return;
-        const inductionUrl = `${app.get('CLIENT_DOMAIN')}/induction/${key}`;
+        const inductionUrl = `${getClientDomain(params, app)}/induction/${key}`;
         await Promise.all(
           userIds.map((userId) => {
             const user = usersToConfirm.find(

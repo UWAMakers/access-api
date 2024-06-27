@@ -3,6 +3,7 @@ const { authorize } = require('feathers-casl');
 
 const ifChangedTo = require('../../hooks/ifChangedTo');
 const notify = require('../../hooks/notify');
+const search = require('../../hooks/search');
 
 const mailChimpSync = require('./hooks/mailChimpSync');
 const verifyPreferredEmail = require('./hooks/verifyPreferredEmail');
@@ -13,6 +14,7 @@ module.exports = {
   before: {
     all: [authenticate('jwt')],
     find: [
+      search(['name', 'email', 'username', 'firstName', 'lastName', 'preferredEmail', 'displayName']),
       authorizeHook, // make sure this hook runs always last
     ],
     get: [

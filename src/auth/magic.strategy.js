@@ -4,6 +4,7 @@ const { NotAuthenticated } = require('@feathersjs/errors');
 const moment = require('moment-timezone');
 const { getActionEmailHtml } = require('../util/email/index');
 const { tokenToData } = require('../util/cryptMeTimbers');
+const getClientDomain = require('../util/getClientDomain');
 
 const domains = ['uwa.edu.au', 'student.uwa.edu.au'];
 class MagicStrategy extends LocalStrategy {
@@ -54,8 +55,8 @@ class MagicStrategy extends LocalStrategy {
     };
   }
 
-  async sendMagicLink(email, tokenData, userData) {
-    const finishUrl = `${this.app.get('CLIENT_DOMAIN')}/verify?token=${encodeURIComponent(tokenData.token)}&action=${tokenData.action}`;
+  async sendMagicLink(email, tokenData, userData, domain = this.app.get('CLIENT_DOMAIN')) {
+    const finishUrl = `${domain}/verify?token=${encodeURIComponent(tokenData.token)}&action=${tokenData.action}`;
     const actionCopies = {
       magic_login: 'logging in',
       magic_signup: 'signing up',
@@ -88,7 +89,7 @@ class MagicStrategy extends LocalStrategy {
         html: emailBody,
         to: email,
         from: this.app.get('SMTP_USER'),
-        subject: `Finish ${actionCopy} to ${this.app.get('CLIENT_DOMAIN')}`,
+        subject: `Finish ${actionCopy} to ${domain.replace(/^https?:\/\//, '')}`,
       },
     });
   }
@@ -121,6 +122,8 @@ class MagicStrategy extends LocalStrategy {
       paginate: false,
     });
 
+    const domain = getClientDomain(params, this.app);
+
     if (userData) {
       if (user) {
         throw new NotAuthenticated('User already exists');
@@ -135,7 +138,7 @@ class MagicStrategy extends LocalStrategy {
           'data.email': email,
           action: 'magic_signup',
           usedAt: null,
-          createdAt: { $gt: moment().subtract(5, 'minute').toDate() },
+          createdAt: { $gt: moment().subtract(1, 'minute').toDate() },
           $limit: 0,
         },
       });
@@ -151,7 +154,7 @@ class MagicStrategy extends LocalStrategy {
           ...linkData,
         },
       });
-      await this.sendMagicLink(email, tokenData, validUserData);
+      await this.sendMagicLink(email, tokenData, validUserData, domain);
       throw new NotAuthenticated('Magic link sent', { action: 'magic_signup_sent' });
     }
 
@@ -182,7 +185,7 @@ class MagicStrategy extends LocalStrategy {
       userId: user._id,
       data: linkData,
     });
-    await this.sendMagicLink(email, tokenData, user);
+    await this.sendMagicLink(email, tokenData, user, domain);
     throw new NotAuthenticated('Magic link sent', { action: 'magic_login_sent' });
   }
 }

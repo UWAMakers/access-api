@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<head>
+  <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+</head>
+<body>
+  <div class="main-wrapper">
+    <div class="images">
+      <div class="qr">
+        <div class="makers">
+          <img class="icon-img" crossorigin="anonymous" src="{{iconSrc}}" />
+          {{shortBrandName}}
+        </div>
+        <img class="qr-img" data-uri="{{label.data.qrUri}}" />
+      </div>
+      <div class="qr">
+        <div class="makers">
+          <img class="icon-img" crossorigin="anonymous" src="{{iconSrc}}" />
+          {{shortBrandName}}
+        </div>
+        <img class="qr-img" data-uri="{{label.data.qrUri}}" />
+      </div>
+      <div class="qr">
+        <div class="makers">
+          <img class="icon-img" crossorigin="anonymous" src="{{iconSrc}}" />
+          {{shortBrandName}}
+        </div>
+        <img class="qr-img" data-uri="{{label.data.qrUri}}" />
+      </div>
+      <div class="qr">
+        <div class="makers">
+          <img class="icon-img" crossorigin="anonymous" src="{{iconSrc}}" />
+          {{shortBrandName}}
+        </div>
+        <img class="qr-img" data-uri="{{label.data.qrUri}}" />
+      </div>
+      <div class="qr">
+        <div class="makers">
+          <img class="icon-img" crossorigin="anonymous" src="{{iconSrc}}" />
+          {{shortBrandName}}
+        </div>
+        <img class="qr-img" data-uri="{{label.data.qrUri}}" />
+      </div>
+    </div>
+  </div>
+  <style>
+    html {
+      background-color: #333;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    body {
+      margin: 0;
+      /* padding: 3mm; */
+      font-family: sans-serif;
+      font-size: 10px;
+      color: #333;
+      max-width: 62mm;
+      background-color: #fff;
+    }
+    .main-wrapper {
+      display: flex;
+      flex-direction: row;
+      align-items: start;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    .icon {
+      width: 100%;
+    }
+
+    img {
+      width: 100%;
+    }
+
+    .text-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+      justify-content: center;
+      padding: 0 4px;
+    }
+
+    .text-header {
+      font-size: 0.8em;
+      font-weight: bold;
+      margin-bottom: 0.5em;
+      margin-block-start: unset;
+      margin-block-end: unset;
+    }
+
+    .text-subheading,
+    .text-body {
+      font-size: 1em;
+      margin-bottom: 0.25em;
+    }
+
+    .text-id {
+      font-size: 0.75em;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    .images {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+    .qr {
+      width: 20%;
+      margin: 0 4px;
+      text-align: center;
+    }
+    .makers {
+      font-size: 0.75em;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .icon-img {
+      width: 1em;
+      margin-right: 2px;
+    }
+  </style>
+  <script>
+    document.querySelectorAll('.qr-img').forEach(function(el) {
+      const qrCode = new QRCodeStyling({
+        width: 300,
+        height: 300,
+        type: "svg",
+        data: el.dataset.uri,
+        qrOptions: {
+          errorCorrectionLevel: 'L',
+        },
+      });
+
+      qrCode.getRawData().then((blob) => {
+        el.src = URL.createObjectURL(blob);
+      });
+    });
+  </script>
+</body>

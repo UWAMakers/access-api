@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  label-generator:
+    build: 
+      context: ./label-generator
+      dockerfile: Dockerfile
+    container_name: label-generator
+    environment:
+      - API_URL=http://192.168.20.97:3030
+    env_file:
+      - .env
+    networks:
+      - default
+    restart: always
+  label-printer-client:
+    build:
+      context: ./label-printer-client
+      dockerfile: Dockerfile
+    container_name: label-printer-client
+    environment:
+      # before you think of anything, this is a fake printer id and secret, not production
+      - API_URL=http://192.168.20.97:3030
+      - LABEL_GEN_URL=http://label-generator:3000/label-gen
+      - PRINTER_ID=61f9417460693609c8bdd48d
+      - PRINTER_SECRET=secret
+      - POLLING_INTERVAL=5000
+    env_file:
+      - .env
+    devices:
+      - /dev/usb/lp0
+    networks:
+      - default
+    restart: always
+    depends_on:
+      - label-generator
