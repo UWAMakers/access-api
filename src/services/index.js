@@ -17,6 +17,8 @@ const labelPrinters = require('./label-printers/label-printers.service.js');
 const labels = require('./labels/labels.service.js');
 const tokens = require('./tokens/tokens.service.js');
 const tokenActions = require('./tokens/actions/tokens-actions.service.js');
+const things = require('./things/things.service.js');
+const thingsTags = require('./things/tags/tags.service.js');
 // eslint-disable-next-line no-unused-vars
 module.exports = function (app) {
   app.configure(users);
@@ -38,4 +40,6 @@ module.exports = function (app) {
   app.configure(labels);
   app.configure(tokens);
   app.configure(tokenActions);
+  app.configure(things);
+  app.configure(thingsTags);
 };
