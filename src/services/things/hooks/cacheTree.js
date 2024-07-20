@@ -8,7 +8,8 @@ module.exports = (config) => async (context, next) => {
 
   const { data, existing, app } = context;
 
-  if (`${data.containerId}` === `${existing?.containerId}`) return next();
+  if (`${data.containerId}` === `${existing?.containerId}` && existing.containerIds.length) return next();
+  if (!data.containerId) return next();
 
   if (`${data.containerId}` === `${existing?._id}` && existing?._id) {
     throw new BadRequest('Cannot set a thing as a container of itself');

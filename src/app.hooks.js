@@ -1,5 +1,6 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { defineAbilitiesFor } = require('./services/authentication/authentication.abilities');
+const { discard } = require('feathers-hooks-common');
 
 const stashExisting = async (context) => {
   const { service, id, params, path, method } = context;
@@ -38,11 +39,24 @@ module.exports = {
   before: {
     all: [doubleCheckAbilities],
     find: [],
-    get: [stashExisting],
-    create: [],
-    update: [stashExisting],
-    patch: [stashExisting],
-    remove: [stashExisting],
+    get: [
+      stashExisting,
+    ],
+    create: [
+      discard('createdAt', 'updatedAt'),
+    ],
+    update: [
+      stashExisting,
+      discard('createdAt', 'updatedAt'),
+    ],
+    patch: [
+      stashExisting,
+      discard('createdAt', 'updatedAt'),
+    ],
+    remove: [
+      stashExisting,
+      discard('createdAt', 'updatedAt'),
+    ],
   },
 
   after: {

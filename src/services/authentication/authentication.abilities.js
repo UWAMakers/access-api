@@ -32,7 +32,9 @@ const defineRulesFor = async (user, app) => {
   if (user.roles?.some(r => ['admin', 'inventory_manager'].includes(r))) {
     can('manage', 'things');
     can('manage', 'things-tags');
-    return rules;
+    can('manage', 'labels');
+    can('read', 'label-printers');
+    // return rules;
   }
 
   if (user.roles?.includes('admin')) {

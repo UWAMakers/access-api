@@ -1,13 +1,14 @@
 const { checkContext } = require('feathers-hooks-common');
 // const { BadRequest } = require('@feathersjs/errors');
 
-const searchRegex = (search, options = { flags: 'i' }) => {
-  const { flags } = options;
-  const escapedSearch = search
+const searchRegex = (search, options = { flags: 'i', exact: false }) => {
+  const { flags, exact } = options;
+  let escapedSearch = search
     .trim()
     .replace(/[^\w-\s]/g, '.?')
     .split(/\s+/g)
-    .join();
+    .join('\\s+');
+  if (exact) escapedSearch = `^${escapedSearch}$`;
   return { $regex: escapedSearch, $options: flags };
 };
 
@@ -21,7 +22,7 @@ const searchRegex = (search, options = { flags: 'i' }) => {
 // };
 
 // eslint-disable-next-line no-unused-vars
-module.exports = (fields = [], config) => async (context) => {
+module.exports = (fields = [], exactFields = [], config) => async (context) => {
   checkContext(context, 'before', ['find']);
 
   const { params } = context;
@@ -43,13 +44,17 @@ module.exports = (fields = [], config) => async (context) => {
   }
 
   const search = searchRegex($search);
+  const exactSearch = searchRegex($search, { exact: true, flags: 'i' });
 
   params.query = {
     ...rest,
     $and: [
       ...(params.query.$and || []),
       {
-        $or: fields.map((field) => ({ [field]: search })),
+        $or: [
+          ...fields.map((field) => ({ [field]: search })),
+          ...exactFields.map((field) => ({ [field]: exactSearch })),
+        ],
       },
     ],
   };

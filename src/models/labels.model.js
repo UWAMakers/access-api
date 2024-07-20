@@ -16,6 +16,7 @@ module.exports = function (app) {
     printerId: { type: mongooseClient.Types.ObjectId },
     template: { type: String, default: 'default' },
     copies: { type: Number, default: 1, min: 1 },
+    thingId: { type: mongooseClient.Types.ObjectId },
     data: {
       qrUri: { type: String },
       header: { type: String },

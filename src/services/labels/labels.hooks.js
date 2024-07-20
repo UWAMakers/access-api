@@ -4,6 +4,7 @@ const { authorize } = require('feathers-casl');
 
 const assignPrinter = require('./hooks/assignPrinter');
 const renderTemplate = require('./hooks/renderTemplate');
+const populateData = require('./hooks/populateData');
 const authorizeHook = authorize({ adapter: '@feathersjs/mongodb' });
 
 module.exports = {
@@ -16,16 +17,19 @@ module.exports = {
       authorizeHook, // make sure this hook runs always last
     ],
     create: [
+      populateData(),
       assignPrinter(),
       discard('html'),
       authorizeHook, // make sure this hook runs always last
     ],
     update: [
+      populateData(),
       assignPrinter(),
       discard('html'),
       authorizeHook, // make sure this hook runs always last
     ],
     patch: [
+      populateData(),
       assignPrinter(),
       discard('html'),
       authorizeHook, // make sure this hook runs always last

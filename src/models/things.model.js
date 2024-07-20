@@ -1,3 +1,4 @@
+const file = require('./file.model');
 // things-model.js - A mongoose model
 // 
 // See http://mongoosejs.com/docs/models.html
@@ -52,6 +53,7 @@ module.exports = function (app) {
         'computer',
         'software',
         'accessory',
+        'ppe',
         // 'stationery', // pens, paper, etc
         // fixture
         'furniture',
@@ -62,7 +64,6 @@ module.exports = function (app) {
     },
     ref: { type: String, unique: true },
     description: { type: String, trim: true },
-    imageUrls: { type: [String] },
     flags: [{
       type: String,
       enum: [
@@ -82,52 +83,21 @@ module.exports = function (app) {
       quantity: { type: Number, default: 1 },
       value: { type: Number },
     }],
-    resources: [{
-      type: {
-        type: String,
-        required: true,
-        enum: [
-          'source',
-          'manual',
-          'datasheet',
-          'sop',
-          'msds',
-          'specification',
-          'guide',
-          'software',
-          'hardware',
-          'service',
-          'warranty',
-          'map',
-          'other',
-        ],
-      },
-      provider: {
-        type: String,
-        required: true,
-        enum: [
-          'link',
-          's3',
-          'google-drive',
-          'sharepoint',
-          'image',
-          'youtube',
-          'vimeo',
-        ],
-      },
-      name: { type: String, required: true },
-      description: { type: String },
-      url: { type: String },
-    }],
+    mainImage: {
+      type: new Schema(file),
+      required: false,
+    },
+    images: [file],
+    resources: [file],
     contacts: [{
       type: { type: String, required: true, enum: ['owner', 'user', 'maintainer', 'supplier'] },
+      userId: { type: Schema.Types.ObjectId, ref: 'users' },
       name: { type: String, required: true },
       avatarUrl: { type: String },
       discordId: { type: String },
       username: { type: String },
       description: { type: String },
       inactive: { type: Boolean },
-      userId: { type: Schema.Types.ObjectId, ref: 'users' },
     }],
     tagIds: [{ type: Schema.Types.ObjectId, ref: 'things-tags' }],
     containerId: { type: Schema.Types.ObjectId, ref: 'things' },
