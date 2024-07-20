@@ -55,7 +55,6 @@ module.exports = {
     ],
     remove: [
       stashExisting,
-      discard('createdAt', 'updatedAt'),
     ],
   },
 
