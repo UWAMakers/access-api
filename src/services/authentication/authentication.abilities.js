@@ -29,6 +29,14 @@ const defineRulesFor = async (user, app) => {
     return rules;
   }
 
+  if (user.roles?.some(r => ['admin', 'inventory_manager'].includes(r))) {
+    can('manage', 'things');
+    can('manage', 'things-tags');
+    can('manage', 'labels');
+    can('read', 'label-printers');
+    // return rules;
+  }
+
   if (user.roles?.includes('admin')) {
     can('manage', 'home-links');
     can('manage', 'trainings');
@@ -50,6 +58,8 @@ const defineRulesFor = async (user, app) => {
   });
 
   can('read', 'home-links');
+  can('read', 'things');
+  can('read', 'things-tags');
   can('read', 'trainings');
   can('read', 'training-items');
   can('read', 'inductions-pending');

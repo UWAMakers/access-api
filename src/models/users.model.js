@@ -13,7 +13,7 @@ module.exports = function (app) {
       firstName: { type: String },
       lastName: { type: String },
       displayName: { type: String },
-      roles: { type: [String], enum: ['admin', 'super_admin'] },
+      roles: { type: [String], enum: ['admin', 'super_admin', 'inventory_manager'] },
       discordId: { type: String },
       preferences: {
         joinedAt: { type: Date },

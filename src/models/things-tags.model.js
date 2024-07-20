@@ -1,32 +1,21 @@
-// labels-model.js - A mongoose model
+// things-tags-model.js - A mongoose model
 // 
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
+
+// a thing is a item/place/anything that can be added the inventory system
 module.exports = function (app) {
-  const modelName = 'labels';
+  const modelName = 'thingsTags';
   const mongooseClient = app.get('mongooseClient');
   const { Schema } = mongooseClient;
   const schema = new Schema({
-    status: {
-      type: String,
-      required: true,
-      enum: ['draft', 'pending', 'complete', 'cancelled'],
-      default: 'draft',
-    },
-    printerId: { type: mongooseClient.Types.ObjectId },
-    template: { type: String, default: 'default' },
-    copies: { type: Number, default: 1, min: 1 },
-    thingId: { type: mongooseClient.Types.ObjectId },
-    data: {
-      qrUri: { type: String },
-      header: { type: String },
-      subheader: { type: String },
-      body: { type: String },
-      footer: { type: String },
-    },
+    name: { type: String, required: true, trim: true },
+    icon: { type: String },
+    color: { type: String },
     createdAt: { type: Date },
     updatedAt: { type: Date },
-  }, {
+  },
+  {
     timestamps: !process.env.DISABLE_TIMESTAMPS,
   });
 

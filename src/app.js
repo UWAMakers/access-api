@@ -20,6 +20,7 @@ const appHooks = require('./app.hooks');
 const channels = require('./channels');
 const scheduleJobs = require('./util/scheduleJobs');
 const syncWithOldData = require('./util/syncWithOldData');
+const objectStore = require('./util/object-store');
 
 const authentication = require('./authentication');
 
@@ -83,6 +84,7 @@ app.configure(channels);
 app.configure(feathersCasl());
 app.configure(scheduleJobs);
 app.configure(syncWithOldData);
+app.configure(objectStore);
 
 const gitHash = gitDescribeSync().hash;
 app.get('/version', (req, res) => {

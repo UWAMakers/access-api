@@ -8,6 +8,7 @@ const search = require('../../hooks/search');
 const mailChimpSync = require('./hooks/mailChimpSync');
 const verifyPreferredEmail = require('./hooks/verifyPreferredEmail');
 const setPreferredEmail = require('./hooks/setPreferredEmail');
+const updateThingContacts = require('./hooks/updateThingContacts');
 const authorizeHook = authorize({ adapter: '@feathersjs/mongodb' });
 
 module.exports = {
@@ -52,12 +53,14 @@ module.exports = {
     ],
     update: [
       verifyPreferredEmail(),
+      updateThingContacts(),
     ],
     patch: [
       ifChangedTo({ 'preferences.joinedAt': (v) => !!v }, [
         notify('user_joined', '_id'),
       ]),
       verifyPreferredEmail(),
+      updateThingContacts(),
     ],
     remove: [],
   },
