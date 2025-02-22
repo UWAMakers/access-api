@@ -3,11 +3,12 @@ const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcrypt');
 const errors = require('@feathersjs/errors');
 
-const hour = 1000 * 60 * 60;
+const minute = 1000 * 60;
+// const hour = 60 * minute;
 const actionExpiries = {
-  magic_login: 1 * hour,
-  magic_signup: 24 * hour,
-  verify_preferred_email: 24 * hour,
+  magic_login: 15 * minute,
+  magic_signup: 15 * minute,
+  verify_preferred_email: 30 * minute,
 };
 
 // eslint-disable-next-line no-unused-vars

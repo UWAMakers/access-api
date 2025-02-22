@@ -16,12 +16,12 @@ module.exports = (config) => async (context) => {
   const token = await service._get(idPart);
   if (!token) throw new errors.NotFound('Token not found');
 
-  const { key, usedAt, expiresAt } = token;
+  const { key, /* usedAt, */ expiresAt } = token;
 
   const match = await bcrypt.compare(keyPart, key);
   if (!match) throw new errors.NotFound('Token not found');
 
-  if (usedAt) throw new errors.BadRequest('Token already used');
+  // if (usedAt) throw new errors.BadRequest('Token already used');
   if (expiresAt < (new Date())) throw new errors.BadRequest('Token expired');
 
   context.id = idPart;

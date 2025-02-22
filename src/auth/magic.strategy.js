@@ -171,7 +171,7 @@ class MagicStrategy extends LocalStrategy {
       query: {
         userId: user._id,
         action: 'magic_login',
-        usedAt: null,
+        // usedAt: null,
         createdAt: { $gt: moment().subtract(1, 'minute').toDate() },
         $limit: 0,
       },
