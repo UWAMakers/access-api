@@ -8,6 +8,8 @@
     "authStrategies": [
       "jwt",
       "magic",
+      "code",
+      "label-printer",
       "discord"
     ],
     "oauth": {

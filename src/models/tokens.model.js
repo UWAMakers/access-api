@@ -14,6 +14,8 @@ module.exports = function (app) {
         enum: [
           'magic_login',
           'magic_signup',
+          'code_login',
+          'code_signup',
           'verify_preferred_email',
         ],
       },

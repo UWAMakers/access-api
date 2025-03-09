@@ -8,6 +8,8 @@ const minute = 1000 * 60;
 const actionExpiries = {
   magic_login: 15 * minute,
   magic_signup: 15 * minute,
+  code_login: 15 * minute,
+  code_signup: 15 * minute,
   verify_preferred_email: 30 * minute,
 };
 
@@ -19,7 +21,7 @@ module.exports = (config) => async (context) => {
 
   if (!data.action) throw new errors.BadRequest('Action is required');
 
-  const rawKey = uuidv4();
+  const rawKey = params.rawKey || uuidv4();
   data.key = await bcrypt.hash(rawKey, 10);
   data.expiresAt = new Date(Date.now() + (actionExpiries[data.action] || 0));
 

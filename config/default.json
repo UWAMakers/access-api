@@ -15,6 +15,7 @@
       "local",
       "label-printer",
       "magic",
+      "code",
       "discord"
     ],
     "jwtOptions": {
@@ -36,6 +37,10 @@
       "passwordField": "password"
     },
     "magic": {
+      "usernameField": "email",
+      "passwordField": "password"
+    },
+    "code": {
       "usernameField": "email",
       "passwordField": "password"
     },

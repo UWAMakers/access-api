@@ -10,6 +10,7 @@ module.exports = function (app) {
     name: { type: String, required: true, trim: true },
     icon: { type: String, required: true, trim: true },
     href: { type: String, required: true, trim: true },
+    sortIndex: { type: Number, required: true, default: 100 },
     createdAt: { type: Date },
     updatedAt: { type: Date },
   },

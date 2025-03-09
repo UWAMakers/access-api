@@ -6,6 +6,7 @@ const { oauth } = require('@feathersjs/authentication-oauth');
 // const PhemeStrategy = require('./auth/pheme.strategy');
 const JWTStrategy = require('./auth/jwt.strategy');
 const MagicStrategy = require('./auth/magic.strategy');
+const CodeStrategy = require('./auth/code.strategy');
 const OAuthStrategy = require('./auth/oauth.strategy');
 const authHooks = require('./services/authentication/authentication.hooks');
 
@@ -16,6 +17,7 @@ module.exports = (app) => {
   // authentication.register('local', new PhemeStrategy());
   authentication.register('label-printer', new LocalStrategy());
   authentication.register('magic', new MagicStrategy());
+  authentication.register('code', new CodeStrategy());
   authentication.register('discord', new OAuthStrategy());
 
   app.use('/authentication', authentication);
