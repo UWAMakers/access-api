@@ -1,7 +1,7 @@
 {
-  "host": "access.uwamakers.com",
+  "host": "api.uwamakers.com",
   "CATCH_NOTIFICATIONS": false,
-  "CLIENT_DOMAIN": "https://access.uwamakers.com",
+  "CLIENT_DOMAIN": "https://api.uwamakers.com",
   "authentication": {
     "entity": "user",
     "service": "users",
