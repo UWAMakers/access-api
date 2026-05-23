@@ -3,6 +3,9 @@ WORKDIR /usr/src/app
 
 ENV VUE_APP_API_URL=/
 
+# Install git because yarn may need it to resolve dependencies linked to git URLs
+RUN apk add --no-cache git
+
 # Install dependencies separately to leverage Docker's layer caching
 COPY package.json yarn.lock* ./
 RUN yarn install --frozen-lockfile && \
