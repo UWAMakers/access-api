@@ -3,6 +3,7 @@ const { processQuizzes } = require('./quizProcessing');
 const sendScheduledNotifications = require('./jobs/sendScheduledNotifications');
 
 module.exports = (app) => {
+  if (process.env.DISABLE_JOBS) return;
   let lastCompletionSync = 0;
   let lastTokenCleanup = 0;
   let runningAt = 0;
