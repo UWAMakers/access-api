@@ -3,18 +3,16 @@ WORKDIR /usr/src/app
 
 ENV VUE_APP_API_URL=/
 
-RUN apk --update add git less openssh && \
-    rm -rf /var/lib/apt/lists/* && \
-    rm /var/cache/apk/*
+# Install dependencies separately to leverage Docker's layer caching
+COPY package.json yarn.lock* ./
+RUN yarn install --frozen-lockfile && \
+    yarn cache clean
 
-RUN git clone https://github.com/UWAMakers/access-frontend.git
-RUN cd access-frontend && yarn && yarn build
-RUN cd ../
-RUN git clone https://github.com/UWAMakers/access-api.git
-RUN mv ./access-api/* . 2> /dev/null; mv ./access-api/.* . 2> /dev/null; rmdir ./access-api
-RUN yarn
-RUN cp -r access-frontend/dist/* ./public
-RUN rm -rf access-frontend
+# Copy the local API source code
+COPY . .
+
+# Build step if necessary (e.g., if you have a build script in package.json)
+# RUN yarn build
 
 EXPOSE 3030
 CMD ["yarn", "start"]
