@@ -41,7 +41,7 @@ module.exports = (options = {}) => {
     Promise.all(
       keys.map(async ({ key, userIds, emailSent, _id }) => {
         if (emailSent || !userIds.length) return;
-        const inductionUrl = `${getClientDomain(params, app)}/induction/${key}`;
+        const inductionUrl = `${getClientDomain(params, app)}/dashboard/induction/${key}`;
         await Promise.all(
           userIds.map((userId) => {
             const user = usersToConfirm.find(
